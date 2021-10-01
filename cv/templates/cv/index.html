@@ -1,0 +1,9 @@
+{% if experiences %}
+    <ul>
+        {% for experience in experiences %}
+                {{ experience | safe}}
+        {% endfor %}
+    </ul>
+{% else %}
+<p> tesgskljlkj</p>
+{% endif %}

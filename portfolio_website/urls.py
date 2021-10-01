@@ -21,4 +21,5 @@ import main
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
+    path('cv/', include('cv.urls')),
 ]

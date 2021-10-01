@@ -4,11 +4,10 @@ from django.db import models
 
 # Create your models here.
 
-
 class Experience(models.Model):
     authority = models.CharField(max_length=200)
     title = models.CharField(max_length=200)
-    start_month = models.IntegerField(validators=[MinValueValidator(12), MaxValueValidator(1)])
+    start_month = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(12)])
     start_year = models.IntegerField()
     end_month = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(12)], blank=True, null=True)
     end_year = models.IntegerField(blank=True, null=True)

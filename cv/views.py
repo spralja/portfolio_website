@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.template import loader
 
-from cv.models import Experience, Description, Education, Course, Project, TechnicalSkill, Language, Hobby
+from .models import *
 
 
 def index(request):
@@ -15,5 +15,6 @@ def index(request):
         'technical_skills': TechnicalSkill.objects.all(),
         'languages': Language.objects.all(),
         'hobbies': Hobby.objects.all(),
+        'resume_paragraphs': ResumeParagraph.objects.all(),
     }
     return HttpResponse(template.render(context, request))

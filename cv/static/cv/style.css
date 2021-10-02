@@ -1,5 +1,5 @@
-.experience {
-    margin: 0px;
+th {
+    font-weight: normal;
 }
 
 .cv-left-column {
@@ -7,53 +7,26 @@
     vertical-align: text-top;
 }
 
+.cv-left-column-unit {
+    margin: 0px 0px 0px 0px;
+    padding: 2.5% 5% 2.5% 5%;
+}
+
+.heading {
+    font-weight: bold;
+}
+
+.resume {
+    margin: 4% 4% 4% 4%;
+    outline: 2px solid black;
+}
+
+.resume-heading {
+    font-size: 18px;
+}
+
 .cv-right-column {
     width:75%;
     vertical-align: text-top;
 }
 
-.resume {
-    margin: 5px 5px 5px 5px;
-    outline: 2px solid black;
-}
-
-.resume-heading {
-    font-size: 24px;
-    font-weight: bold;
-    outline: 0px;
-    margin: 0px 0px 0px 0px;
-    padding: 2.5% 5% 2.5% 5%;
-}
-
-.resume-li {
-    font-weight: normal;
-    margin: 0px 0px 0px 0px;
-    list-style: none;
-}
-
-.resume-ul {
-    margin: 0px 0px 0px 0px;
-    padding: 2.5% 5% 2.5% 5%;
-}
-
-.lang-li {
-    font-weight: normal;
-    margin: 0px 0px 0px 0px;
-    list-style: none;
-}
-
-.lang-ul {
-    font-weight: normal;
-    list-style: none;
-    margin: 0px 0px 0px 0px;
-    padding: 2.5% 5% 2.5% 5%;
-}
-
-.lang-heading {
-    font-weight: bold;
-}
-
-.it-skills {
-    font-weight: normal;
-    margin: 5% 5% 5% 5%;
-}

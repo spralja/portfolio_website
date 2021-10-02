@@ -194,3 +194,10 @@ class Hobby(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class ResumeParagraph(models.Model):
+    paragraph = models.TextField()
+
+    def __str__(self):
+        return self.paragraph

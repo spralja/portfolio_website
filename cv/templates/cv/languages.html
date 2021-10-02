@@ -1,8 +1,10 @@
-<p class="lang-heading">
-    Languages
-</p>
-<li class="lang-li">
+<div>
+    <p class="heading cv-left-column-unit">
+        Languages:
+    </p>
     {% for language in languages %}
-        <ul class="lang-ul">{{ language }}</ul>
+        <p class="cv-left-column-unit">
+            {{ language }}
+        </p>
     {% endfor %}
-</li>
+</div>

@@ -119,7 +119,7 @@ class Education(models.Model):
     )
 
     def __str__(self):
-        return "%s - %s" %(self.authority, self.title)
+        return "%s - %s" % (self.authority, self.title)
 
 
 class Course(models.Model):
@@ -135,6 +135,62 @@ class Project(models.Model):
     name = models.CharField(max_length=200)
     description = models.CharField(max_length=200, blank=True, null=True)
     education = models.ForeignKey(Education, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+
+class TechnicalSkill(models.Model):
+    name = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name
+
+
+'''class Language(models.Model):
+
+    class Level(models.IntegerChoices):
+        ELEMENTARY = 1, _("elementary")
+        PROFESSIONAL = 2, _("professional")
+        FLUENT = 3, _("fluent")
+        BILINGUAL = 4, _("bilingual")
+        NATIVE = 5, _("native")
+
+    name = models.CharField(max_length=20, primary_key=True)
+    level = models.IntegerField(choices=Level)'''
+
+
+class Language(models.Model):
+    switch_level = {
+        1: "elementary",
+        2: "professional",
+        3: "fluent",
+        4: "bilingual",
+        5: "native",
+    }
+
+    class Level(models.IntegerChoices):
+        ELEMENTARY = 1, _("elementary")
+        PROFESSIONAL = 2, _("professional")
+        FLUENT = 3, _("fluent")
+        BILINGUAL = 4, _("bilingual")
+        NATIVE = 5, _("native")
+
+    level = models.IntegerField(choices=Level.choices)
+    name = models.CharField(max_length=200, primary_key=True)
+
+    def __str__(self):
+        return "%s - %s" %(self.name, self.get_level())
+
+    def get_level(self):
+        return self.switch_level[self.level]
+
+
+class Hobby(models.Model):
+    name = models.CharField(max_length=20)
+
+    class Meta:
+        verbose_name_plural = "Hobbies"
 
     def __str__(self):
         return self.name

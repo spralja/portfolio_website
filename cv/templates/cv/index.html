@@ -5,21 +5,29 @@
         <title>Curriculum vitae</title>
     </head>
     <body>
-        <table>
+        <table >
             <tr>
-                <th>
-                    {% include 'cv/profile_picture.html' %}
+                <th class="cv-left-column">
+                    <img
+                        src="https://media-exp1.licdn.com/dms/image/C4D03AQHdRj2_93YqtA/profile-displayphoto-shrink_800_800/0/1630868758178?e=1638403200&v=beta&t=Cn5It9Qovtn7MgWhAwYtLoshKtQ0iqB4NIJWJqZK_uU"
+                        alt="Profile picture"
+                        width="100%"
+                    >
                 </th>
-                <th>
-                    {% include 'cv/education.html' %}
+                <th class="cv-right-column">
+                    {% include 'cv/name.html' %}
                 </th>
             </tr>
             <tr>
-                <th>
-                    {% include 'cv/experience.html' %}
+                <th class="cv-left-column">
+                    {% include 'cv/resume.html' %}
+                    {% include 'cv/technical_skills.html' %}
+                    {% include 'cv/languages.html' %}
+                    {% include 'cv/hobbies.html' %}
                 </th>
-                <th>
-                    test
+                <th class="cv-right-column">
+                    {% include 'cv/education.html' %}
+                    {% include 'cv/experience.html' %}
                 </th>
             </tr>
         </table>

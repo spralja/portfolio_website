@@ -40,14 +40,14 @@ def createExperience(year1, year2):
         return Experience(
             authority="",
             title="",
-            start_date=Date(1, year1),
+            start_date=createDate(1, year1),
             end_date=None
         )
 
     return Experience(
         authority="",
         title="",
-        start_date=Date(1, year1),
+        start_date=createDate(1, year1),
         end_date=Date(1, year2)
     )
 

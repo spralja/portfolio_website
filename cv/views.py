@@ -7,7 +7,7 @@ from cv.models import Experience, Description
 def index(request):
     template = loader.get_template('cv/index.html')
     context = {
-        'experiences': Experience.objects.all(),
+        'experiences': Experience.objects.order(),
         'descriptions': Description.objects.all(),
     }
     return HttpResponse(template.render(context, request))

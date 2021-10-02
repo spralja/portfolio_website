@@ -37,7 +37,7 @@ class Date(models.Model):
 class ExperienceManager(models.Manager):
     def order(self, *args, **kwargs):
         qs = self.get_queryset().filter(*args, **kwargs)
-        return sorted(qs, key=lambda n: (n[0] , int(n[1:])))
+        return sorted(qs)
 
 
 class Experience(models.Model):
@@ -45,6 +45,8 @@ class Experience(models.Model):
     title = models.CharField(max_length=200)
     start_date = models.ForeignKey(Date, on_delete=models.CASCADE, related_name="start_date")
     end_date = models.ForeignKey(Date, on_delete=models.CASCADE, blank=True, null=True, related_name="end_date")
+
+    objects = ExperienceManager()
 
     def __str__(self):
         return "%s - %s" % (self.authority, self.title)
@@ -55,6 +57,9 @@ class Experience(models.Model):
             string += self.end_date.__str__()
 
         return string
+
+    def __lt__(self, other):
+        return self.compare(other) > 0
 
     def compare(self, other):
         if self.end_date is None:

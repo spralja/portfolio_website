@@ -48,6 +48,15 @@ class Date(models.Model):
 
         return self.year - other.year
 
+class TimeFrame(models.Model):
+    start_time = models.ForeignKey(
+        Date,
+        on_delete=models.CASCADE, related_name="start_date"
+    )
+    end_time = models.ForeignKey(
+        Date, blank=True, null=True,
+        on_delete=models.CASCADE, related_name="end_date"
+    )
 
 class ExperienceManager(models.Manager):
     def order(self, *args, **kwargs):

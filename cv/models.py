@@ -27,6 +27,17 @@ class Date(models.Model):
     def __str__(self):
         return "%s/%s" % (self.month, self.year)
 
+    def compare(self, other):
+        if self.year == other.year:
+            return self.month - other.month
+
+        return self.year - other.year
+
+
+class ExperienceManager(models.Manager):
+    def order(self, *args, **kwargs):
+        qs = self.get_queryset().filter(*args, **kwargs)
+        return sorted(qs, key=lambda n: (n[0] , int(n[1:])))
 
 class Experience(models.Model):
     authority = models.CharField(max_length=200)
@@ -43,6 +54,12 @@ class Experience(models.Model):
             string += self.end_date.__str__()
 
         return string
+
+    def compare(self, other):
+        if self.end_date is None:
+            if other.end_date is None :
+                if self.start_date.year == other.start_date.year:
+                    return self.start_date.month - other.start_date.month
 
 
 class Description(models.Model):

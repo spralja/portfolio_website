@@ -67,27 +67,22 @@ class ExperienceManager(models.Manager):
 class Experience(models.Model):
     authority = models.CharField(max_length=200)
     title = models.CharField(max_length=200)
-    start_date = models.ForeignKey(Date, on_delete=models.CASCADE, related_name="experience_start_date")
-    end_date = models.ForeignKey(
-        Date,
-        on_delete=models.CASCADE,
-        blank=True,
-        null=True,
-        related_name="experience_end_date"
-    )
+    time_frame = models.ForeignKey(TimeFrame, on_delete=models.CASCADE)
 
     objects = ExperienceManager()
 
     def __str__(self):
         return "%s - %s" % (self.authority, self.title)
 
+    '''
     def get_time_frame(self):
         string = "%s - " % self.start_date
         if self.end_date is not None:
             string += self.end_date.__str__()
 
-        return string
+        return string'''
 
+    '''
     def __lt__(self, other):
         return self.compare(other) > 0
 
@@ -104,7 +99,7 @@ class Experience(models.Model):
             return self.start_date.compare(other.start_date)
 
         return self.end_date.compare(other.end_date)
-
+    '''
 
 class Description(models.Model):
     description = models.CharField(max_length=200)
@@ -118,14 +113,7 @@ class Education(models.Model):
     authority = models.CharField(max_length=200)
     title = models.CharField(max_length=200)
     gpa = models.FloatField(validators=[MinValueValidator(-3.0), MaxValueValidator(12.0)])
-    start_date = models.ForeignKey(Date, on_delete=models.CASCADE, related_name="education_start_date")
-    end_date = models.ForeignKey(
-        Date,
-        on_delete=models.CASCADE,
-        blank=True,
-        null=True,
-        related_name="education_end_date"
-    )
+    time_frame = models.ForeignKey(TimeFrame, on_delete=models.CASCADE)
 
     def __str__(self):
         return "%s - %s" % (self.authority, self.title)

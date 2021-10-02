@@ -42,11 +42,24 @@ class Date(models.Model):
     def get_month(self):
         return self.switch_month[self.month]
 
-    def compare(self, other):
-        if self.year == other.year:
-            return self.month - other.month
 
-        return self.year - other.year
+    @staticmethod
+    def compare(d1, d2):
+        if d1 is None:
+            if d2 is None:
+                return 0
+
+            return 1
+
+        if d2 is None:
+            return -1
+
+        if d1.year == d2.year:
+            return d1.month - d2.month
+
+        return d1.year - d2.year
+
+
 
 class TimeFrame(models.Model):
     start_time = models.ForeignKey(
@@ -124,7 +137,7 @@ class Education(models.Model):
             return string
 
         string += "%s" % self.end_date
-        return string;
+        return string
 
 
 class Course(models.Model):

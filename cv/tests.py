@@ -35,20 +35,111 @@ class DateTest(TestCase):
         self.assertIs(d1.compare(d2) < 0, True)
 
 
-def createExperience(month1, year1, month2, year2):
-    if month2 is None and year2 is None:
+def createExperience(year1, year2):
+    if year2 is None:
         return Experience(
             authority="",
             title="",
-            start_date=Date(month1, year1),
+            start_date=Date(1, year1),
             end_date=None
         )
 
     return Experience(
         authority="",
         title="",
-        start_date=Date(month1, year1),
-        end_date=Date(month2, year2)
+        start_date=Date(1, year1),
+        end_date=Date(1, year2)
     )
 
+
+class ExperienceTest(TestCase):
+    def test_started_later_finished_later(self):
+        e1 = createExperience(2, 2)
+        e2 = createExperience(1, 1)
+        self.assertGreater(e1.compare(e2), 0)
+
+    def test_started_later_finished_same(self):
+        e1 = createExperience(2, 2)
+        e2 = createExperience(1, 2)
+        self.assertGreater(e1.compare(e2), 0)
+
+    def test_started_later_finished_earlier(self):
+        e1 = createExperience(2, 2)
+        e2 = createExperience(1, 3)
+        self.assertGreater(e1.compare(e2), 0)
+
+    def test_started_same_finished_later(self):
+        e1 = createExperience(1, 2)
+        e2 = createExperience(1, 1)
+        self.assertGreater(e1.compare(e2), 0)
+
+    def test_started_same_finished_same(self):
+        e1 = createExperience(1, 1)
+        e2 = createExperience(1, 1)
+        self.assertEqual(e1.compare(e2), 0)
+
+    def test_started_same_finished_earlier(self):
+        e1 = createExperience(1, 1)
+        e2 = createExperience(1, 2)
+        self.assertLess(e1.compare(e2), 0)
+
+    def test_started_earlier_finished_later(self):
+        e1 = createExperience(1, 3)
+        e2 = createExperience(2, 2)
+        self.assertLess(e1.compare(e2), 0)
+
+    def test_started_earlier_finished_same(self):
+        e1 = createExperience(1, 2)
+        e2 = createExperience(2, 2)
+        self.assertLess(e1.compare(e2), 0)
+
+    def test_started_earlier_finished_earlier(self):
+        e1 = createExperience(1, 1)
+        e2 = createExperience(2, 2)
+        self.assertLess(e1.compare(e2), 0)
+
+    def test_started_later_finished_not_not(self):
+        e1 = createExperience(2, None)
+        e2 = createExperience(1, None)
+        self.assertGreater(e1.compare(e2), 0)
+
+    def test_started_later_finished_yes_not(self):
+        e1 = createExperience(2, 2)
+        e2 = createExperience(1, None)
+        self.assertLess(e1.compare(e2), 0)
+
+    def test_started_later_finished_not_yes(self):
+        e1 = createExperience(2, None)
+        e2 = createExperience(1, 1)
+        self.assertGreater(e1.compare(e2), 0)
+
+    def test_started_same_finished_not_not(self):
+        e1 = createExperience(1, None)
+        e2 = createExperience(1, None)
+        self.assertEqual(e1.compare(e2), 0)
+
+    def test_started_same_finished_yes_not(self):
+        e1 = createExperience(1, 1)
+        e2 = createExperience(1, None)
+        self.assertLess(e1.compare(e2), 0)
+
+    def test_started_same_finished_not_yes(self):
+        e1 = createExperience(1, None)
+        e2 = createExperience(1, 1)
+        self.assertGreater(e1.compare(e2), 0)
+
+    def test_started_earlier_finished_not_not(self):
+        e1 = createExperience(1, None)
+        e2 = createExperience(2, None)
+        self.assertLess(e1.compare(e2), 0)
+
+    def test_started_earlier_finished_yes_not(self):
+        e1 = createExperience(1, 1)
+        e2 = createExperience(2, None)
+        self.assertLess(e1.compare(e2), 0)
+
+    def test_started_earlier_finished_not_yes(self):
+        e1 = createExperience(1, None)
+        e2 = createExperience(2, 2)
+        self.assertGreater(e1.compare(e2), 0)
 

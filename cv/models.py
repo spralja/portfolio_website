@@ -58,8 +58,14 @@ class ExperienceManager(models.Manager):
 class Experience(models.Model):
     authority = models.CharField(max_length=200)
     title = models.CharField(max_length=200)
-    start_date = models.ForeignKey(Date, on_delete=models.CASCADE, related_name="start_date")
-    end_date = models.ForeignKey(Date, on_delete=models.CASCADE, blank=True, null=True, related_name="end_date")
+    start_date = models.ForeignKey(Date, on_delete=models.CASCADE, related_name="experience_start_date")
+    end_date = models.ForeignKey(
+        Date,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        related_name="experience_end_date"
+    )
 
     objects = ExperienceManager()
 
@@ -97,3 +103,38 @@ class Description(models.Model):
 
     def __str__(self):
         return self.description
+
+
+class Education(models.Model):
+    authority = models.CharField(max_length=200)
+    title = models.CharField(max_length=200)
+    gpa = models.FloatField(validators=[MinValueValidator(-3.0), MaxValueValidator(12.0)])
+    start_date = models.ForeignKey(Date, on_delete=models.CASCADE, related_name="education_start_date")
+    end_date = models.ForeignKey(
+        Date,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        related_name="education_end_date"
+    )
+
+    def __str__(self):
+        return "%s - %s" %(self.authority, self.title)
+
+
+class Course(models.Model):
+    name = models.CharField(max_length=200)
+    description = models.CharField(max_length=200)
+    education = models.ForeignKey(Education, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+
+class Project(models.Model):
+    name = models.CharField(max_length=200)
+    description = models.CharField(max_length=200, blank=True, null=True)
+    education = models.ForeignKey(Education, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name

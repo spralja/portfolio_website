@@ -57,10 +57,7 @@ class Experience(models.Model):
         return string
 
     def compare(self, other):
-        if self.end_date is None:
-            if other.end_date is None :
-                if self.start_date.year == other.start_date.year:
-                    return self.start_date.month - other.start_date.month
+        return -1
 
 
 class Description(models.Model):

@@ -1,17 +1,28 @@
-{% for education in educations %}
-    <p>{{ education }}</p>
-    <p>{{ education.start_date }} -</p>
-    <p>{{ education.gpa }}</p>
-    <p>Projects</p>
-    {% for project in projects %}
-        {% if project.education == education %}
-            <li>{{ project }}</li>
-        {% endif %}
+<div>
+    <p class="r-col-heading cv-right-column-unit">
+        EDUCATION
+    </p>
+    {% for education in educations %}
+        <p class="cv-right-column-unit">
+            {{ education }} (GPA: {{ education.gpa }})
+        </p>
+        <p class="cv-right-column-unit">
+            {{ education.get_time_frame }}</p>
+        <p class="edu-heading cv-right-column-unit">
+            Projects:
+        </p>
+        {% for project in projects %}
+            {% if project.education == education %}
+                <li class="cv-right-column-unit">{{ project }}</li>
+            {% endif %}
+        {% endfor %}
+        <p class="edu-heading cv-right-column-unit">
+            Relevant Courses:
+        </p>
+        {% for course in courses %}
+            {% if course.education == education %}
+                <li class="cv-right-column-unit">{{ course }}</li>
+            {% endif %}
+        {% endfor %}
     {% endfor %}
-    <p>Courses</p>
-    {% for course in courses %}
-        {% if course.education == education %}
-            <li>{{ course }}</li>
-        {% endif %}
-    {% endfor %}
-{% endfor %}
+</div>

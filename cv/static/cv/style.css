@@ -30,3 +30,15 @@ th {
     vertical-align: text-top;
 }
 
+cv-right-column-unit {
+    margin: 0px 0px 0px 0px;
+    padding: 2.5% 5% 2.5% 10%;
+}
+
+.r-col-heading {
+    font-size: 24px;
+}
+
+.edu-heading {
+    font-weight: bold;
+}

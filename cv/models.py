@@ -121,6 +121,14 @@ class Education(models.Model):
     def __str__(self):
         return "%s - %s" % (self.authority, self.title)
 
+    def get_time_frame(self):
+        string = "%s - " % self.start_date
+        if self.end_date is None:
+            return string
+
+        string += "%s" % self.end_date
+        return string;
+
 
 class Course(models.Model):
     name = models.CharField(max_length=200)
@@ -128,7 +136,11 @@ class Course(models.Model):
     education = models.ForeignKey(Education, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        string = "%s" % self.name
+        if self.description is None:
+            return string
+
+        return string + " - %s" % self.description
 
 
 class Project(models.Model):
@@ -137,7 +149,11 @@ class Project(models.Model):
     education = models.ForeignKey(Education, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        string = "%s" % self.name
+        if self.description is None:
+            return string
+
+        return string + " - %s" % self.description
 
 
 class TechnicalSkill(models.Model):
@@ -145,19 +161,6 @@ class TechnicalSkill(models.Model):
 
     def __str__(self):
         return self.name
-
-
-'''class Language(models.Model):
-
-    class Level(models.IntegerChoices):
-        ELEMENTARY = 1, _("elementary")
-        PROFESSIONAL = 2, _("professional")
-        FLUENT = 3, _("fluent")
-        BILINGUAL = 4, _("bilingual")
-        NATIVE = 5, _("native")
-
-    name = models.CharField(max_length=20, primary_key=True)
-    level = models.IntegerField(choices=Level)'''
 
 
 class Language(models.Model):

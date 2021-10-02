@@ -39,6 +39,7 @@ class ExperienceManager(models.Manager):
         qs = self.get_queryset().filter(*args, **kwargs)
         return sorted(qs, key=lambda n: (n[0] , int(n[1:])))
 
+
 class Experience(models.Model):
     authority = models.CharField(max_length=200)
     title = models.CharField(max_length=200)

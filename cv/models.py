@@ -45,7 +45,6 @@ class Experience(models.Model):
         return string
 
 
-
 class Description(models.Model):
     description = models.CharField(max_length=200)
     experience = models.ForeignKey(Experience, on_delete=models.CASCADE)

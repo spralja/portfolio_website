@@ -4,6 +4,21 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Date(models.Model):
+    switch_month = {
+        1: "January",
+        2: "February",
+        3: "March",
+        4: "April",
+        5: "May",
+        6: "June",
+        7: "July",
+        8: "August",
+        9: "September",
+        10: "October",
+        11: "November",
+        12: "December"
+    }
+
     class Month(models.IntegerChoices):
         JANUARY = 1, _("January")
         FEBRUARY = 2, _("February")
@@ -18,14 +33,14 @@ class Date(models.Model):
         NOVEMBER = 11, _("November")
         DECEMBER = 12, _("December")
 
-        def __str__(self):
-            return self.label
-
     month = models.IntegerField(choices=Month.choices)
     year = models.IntegerField()
 
     def __str__(self):
-        return "%s/%s" % (self.month, self.year)
+        return "%s %s" % (self.get_month(), self.year)
+
+    def get_month(self):
+        return self.switch_month[self.month]
 
     def compare(self, other):
         if self.year == other.year:

@@ -57,7 +57,18 @@ class Experience(models.Model):
         return string
 
     def compare(self, other):
-        return -1
+        if self.end_date is None:
+            if other.end_date is None:
+                return self.start_date.compare(other.start_date)
+            return 1
+
+        if other.end_date is None:
+            return -1
+
+        if self.start_date.compare(other.start_date) == 0:
+            return self.end_date.compare(other.end_date)
+
+        return self.start_date.compare(other.start_date)
 
 
 class Description(models.Model):

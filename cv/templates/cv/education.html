@@ -1,0 +1,17 @@
+{% for education in educations %}
+    <p>{{ education }}</p>
+    <p>{{ education.start_date }} -</p>
+    <p>{{ education.gpa }}</p>
+    <p>Projects</p>
+    {% for project in projects %}
+        {% if project.education == education %}
+            <li>{{ project }}</li>
+        {% endif %}
+    {% endfor %}
+    <p>Courses</p>
+    {% for course in courses %}
+        {% if course.education == education %}
+            <li>{{ course }}</li>
+        {% endif %}
+    {% endfor %}
+{% endfor %}

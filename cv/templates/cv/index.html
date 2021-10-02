@@ -1,15 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {% include 'cv/head.html' %}
+</head>
+<body>
     {% if experiences %}
-    <ul>
-        {% for experience in experiences %}
-            <h1>{{ experience }}</h1>
-            <p>{{ experience.get_time_frame }}</p>
-            {% for description in descriptions %}
-                {% if description.experience == experience %}
-                    <li>{{ description }}</li>
-                {% endif %}
+        <ul>
+            {% for experience in experiences %}
+                <p class="experience-auth-title">{{ experience }}</p>
+                <p>{{ experience.get_time_frame }}</p>
+                {% for description in descriptions %}
+                    {% if description.experience == experience %}
+                        <li>{{ description }}</li>
+                    {% endif %}
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
-    </ul>
-{% else %}
-<p> tesgskljlkj</p>
-{% endif %}
+        </ul>
+    {% endif %}
+</body>
+</html>

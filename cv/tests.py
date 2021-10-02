@@ -66,7 +66,7 @@ class ExperienceTest(TestCase):
     def test_started_later_finished_earlier(self):
         e1 = createExperience(2, 2)
         e2 = createExperience(1, 3)
-        self.assertGreater(e1.compare(e2), 0)
+        self.assertLess(e1.compare(e2), 0)
 
     def test_started_same_finished_later(self):
         e1 = createExperience(1, 2)
@@ -86,7 +86,7 @@ class ExperienceTest(TestCase):
     def test_started_earlier_finished_later(self):
         e1 = createExperience(1, 3)
         e2 = createExperience(2, 2)
-        self.assertLess(e1.compare(e2), 0)
+        self.assertGreater(e1.compare(e2), 0)
 
     def test_started_earlier_finished_same(self):
         e1 = createExperience(1, 2)

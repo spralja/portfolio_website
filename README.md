@@ -3,6 +3,6 @@
 Displaying 4 different graph traversal algorithms for the purpose of collecting and analyzing the performance of each one of them.
 
 
-I worked on this together with
+CO-authors:
 - Robert Spralja
-- Kyle Johnson
+- [Kyle Johnson](https://github.com/miningape)

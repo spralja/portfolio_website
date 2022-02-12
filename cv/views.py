@@ -16,5 +16,7 @@ def index(request):
         'languages': Language.objects.all(),
         'hobbies': Hobby.objects.all(),
         'resume_paragraphs': ResumeParagraph.objects.all(),
+        'heading': CV.objects.all()[0].user_heading,
+        'name': CV.objects.all()[0].user_name,
     }
     return HttpResponse(template.render(context, request))

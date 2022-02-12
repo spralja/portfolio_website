@@ -3,6 +3,11 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
+class CV(models.Model):
+    user_name = models.TextField()
+    user_heading = models.TextField()
+    
+
 class Date(models.Model):
     switch_month = {
         1: "January",

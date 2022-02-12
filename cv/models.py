@@ -8,6 +8,13 @@ class CV(models.Model):
     user_heading = models.TextField()
     
 
+class CVElement(models.Model):
+    parent = models.ForeignKey(CV, on_delete=models.CASCADE)
+
+    class Meta:
+        abstract = 'True'
+
+        
 class Date(models.Model):
     switch_month = {
         1: "January",
@@ -82,7 +89,7 @@ class ExperienceManager(models.Manager):
         return sorted(qs)
 
 
-class Experience(models.Model):
+class Experience(CVElement):
     authority = models.CharField(max_length=200)
     title = models.CharField(max_length=200)
     time_frame = models.ForeignKey(TimeFrame, on_delete=models.CASCADE)

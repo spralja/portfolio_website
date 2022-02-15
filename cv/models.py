@@ -2,79 +2,15 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-
 class CV(models.Model):
     user_name = models.TextField()
     user_heading = models.TextField()
     
 
-class Date(models.Model):
-    switch_month = {
-        1: "January",
-        2: "February",
-        3: "March",
-        4: "April",
-        5: "May",
-        6: "June",
-        7: "July",
-        8: "August",
-        9: "September",
-        10: "October",
-        11: "November",
-        12: "December"
-    }
-
-    class Month(models.IntegerChoices):
-        JANUARY = 1, _("January")
-        FEBRUARY = 2, _("February")
-        MARCH = 3, _("March")
-        APRIL = 4, _("April")
-        MAY = 5, _("May")
-        JUNE = 6, _("June")
-        JULY = 7, _("July")
-        AUGUST = 8, _("August")
-        SEPTEMBER = 9, _("September")
-        OCTOBER = 10, _("October")
-        NOVEMBER = 11, _("November")
-        DECEMBER = 12, _("December")
-
-    month = models.IntegerField(choices=Month.choices)
-    year = models.IntegerField()
-
-    def __str__(self):
-        return "%s %s" % (self.get_month(), self.year)
-
-    def get_month(self):
-        return self.switch_month[self.month]
-
-
-    @staticmethod
-    def compare(d1, d2):
-        if d1 is None:
-            if d2 is None:
-                return 0
-
-            return 1
-
-        if d2 is None:
-            return -1
-
-        if d1.year == d2.year:
-            return d1.month - d2.month
-
-        return d1.year - d2.year
-
-
-
 class TimeFrame(models.Model):
-    start_time = models.ForeignKey(
-        Date,
-        on_delete=models.CASCADE, related_name="start_date"
-    )
-    end_time = models.ForeignKey(
-        Date, blank=True, null=True,
-        on_delete=models.CASCADE, related_name="end_date"
-    )
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+
 
 class ExperienceManager(models.Manager):
     def order(self, *args, **kwargs):
@@ -83,6 +19,7 @@ class ExperienceManager(models.Manager):
 
 
 class Experience(models.Model):
+    parent = models.ForeignKey(CV, on_delete=models.CASCADE, related_name='cv_experience')
     authority = models.CharField(max_length=200)
     title = models.CharField(max_length=200)
     time_frame = models.ForeignKey(TimeFrame, on_delete=models.CASCADE)
@@ -92,32 +29,6 @@ class Experience(models.Model):
     def __str__(self):
         return "%s - %s" % (self.authority, self.title)
 
-    '''
-    def get_time_frame(self):
-        string = "%s - " % self.start_date
-        if self.end_date is not None:
-            string += self.end_date.__str__()
-
-        return string'''
-
-    '''
-    def __lt__(self, other):
-        return self.compare(other) > 0
-
-    def compare(self, other):
-        if self.end_date is None:
-            if other.end_date is None:
-                return self.start_date.compare(other.start_date)
-            return 1
-
-        if other.end_date is None:
-            return -1
-
-        if self.end_date.compare(other.end_date) == 0:
-            return self.start_date.compare(other.start_date)
-
-        return self.end_date.compare(other.end_date)
-    '''
 
 class Description(models.Model):
     description = models.CharField(max_length=200)
@@ -128,6 +39,7 @@ class Description(models.Model):
 
 
 class Education(models.Model):
+    parent = models.ForeignKey(CV, on_delete=models.CASCADE, related_name='cv_education')
     authority = models.CharField(max_length=200)
     title = models.CharField(max_length=200)
     gpa = models.FloatField(validators=[MinValueValidator(-3.0), MaxValueValidator(12.0)])

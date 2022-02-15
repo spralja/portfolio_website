@@ -11,18 +11,14 @@
         <p class="edu-heading cv-right-column-unit">
             Projects:
         </p>
-        {% for project in projects %}
-            {% if project.education == education %}
-                <li class="cv-right-column-unit">{{ project }}</li>
-            {% endif %}
+        {% for project in education.projects.all %}
+            <li class="cv-right-column-unit">{{ project }}</li>
         {% endfor %}
         <p class="edu-heading cv-right-column-unit">
             Relevant Courses:
         </p>
-        {% for course in courses %}
-            {% if course.education == education %}
-                <li class="cv-right-column-unit">{{ course }}</li>
-            {% endif %}
+        {% for course in education.courses.all %}
+            <li class="cv-right-column-unit">{{ course }}</li>
         {% endfor %}
     {% endfor %}
 </div>

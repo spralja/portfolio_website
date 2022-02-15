@@ -10,4 +10,5 @@ def index(request, cv_name='main'):
     context = {
         'cv': cv,
     }
+
     return HttpResponse(template.render(context, request))

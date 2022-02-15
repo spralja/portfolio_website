@@ -2,65 +2,65 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+
+def HasParent(cls, *, related_name, on_delete=models.CASCADE, **options):
+    Meta = type(related_name + 'Meta', (), {
+        'abstract': 'True',
+    })
+
+    return type(related_name, (models.Model,), {
+        'parent': models.ForeignKey(cls, on_delete=on_delete, related_name=related_name, **options),
+        'Meta': Meta,
+        '__module__': __name__,
+    })
+
+
+class UserPicture(models.Model):
+    url = models.URLField()
+    alt = models.TextField()
+
+
 class CV(models.Model):
+    name = models.CharField(max_length=200, primary_key=True, default='main')
     user_name = models.TextField()
     user_heading = models.TextField()
-    
-
-class TimeFrame(models.Model):
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    user_picture = models.ForeignKey(UserPicture, on_delete=models.CASCADE)
 
 
-class ExperienceManager(models.Manager):
-    def order(self, *args, **kwargs):
-        qs = self.get_queryset().filter(*args, **kwargs)
-        return sorted(qs)
-
-
-class Experience(models.Model):
-    parent = models.ForeignKey(CV, on_delete=models.CASCADE, related_name='cv_experience')
+class Experience(HasParent(CV, related_name='experiences')):
     authority = models.CharField(max_length=200)
     title = models.CharField(max_length=200)
-    time_frame = models.ForeignKey(TimeFrame, on_delete=models.CASCADE)
-
-    objects = ExperienceManager()
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField(null=True)
 
     def __str__(self):
         return "%s - %s" % (self.authority, self.title)
 
 
 class Description(models.Model):
+    parent = models.ForeignKey(Experience, on_delete=models.CASCADE, related_name='descriptions')
     description = models.CharField(max_length=200)
-    experience = models.ForeignKey(Experience, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.description
 
 
-class Education(models.Model):
-    parent = models.ForeignKey(CV, on_delete=models.CASCADE, related_name='cv_education')
+class Education(HasParent(CV, related_name='educations')):
+    #parent = models.ForeignKey(CV, on_delete=models.CASCADE, related_name='educations')
     authority = models.CharField(max_length=200)
     title = models.CharField(max_length=200)
     gpa = models.FloatField(validators=[MinValueValidator(-3.0), MaxValueValidator(12.0)])
-    time_frame = models.ForeignKey(TimeFrame, on_delete=models.CASCADE)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField(null=True)
 
     def __str__(self):
         return "%s - %s" % (self.authority, self.title)
 
-    def get_time_frame(self):
-        string = "%s - " % self.start_date
-        if self.end_date is None:
-            return string
-
-        string += "%s" % self.end_date
-        return string
-
 
 class Course(models.Model):
+    parent = models.ForeignKey(Education, on_delete=models.CASCADE, related_name='courses')
     name = models.CharField(max_length=200)
     description = models.CharField(max_length=200)
-    education = models.ForeignKey(Education, on_delete=models.CASCADE)
 
     def __str__(self):
         string = "%s" % self.name
@@ -71,9 +71,9 @@ class Course(models.Model):
 
 
 class Project(models.Model):
+    parent = models.ForeignKey(Education, on_delete=models.CASCADE, related_name='projects')
     name = models.CharField(max_length=200)
     description = models.CharField(max_length=200, blank=True, null=True)
-    education = models.ForeignKey(Education, on_delete=models.CASCADE)
 
     def __str__(self):
         string = "%s" % self.name
@@ -83,14 +83,14 @@ class Project(models.Model):
         return string + " - %s" % self.description
 
 
-class TechnicalSkill(models.Model):
+class TechnicalSkill(HasParent(CV, related_name='technical_skills'), models.Model):
     name = models.CharField(max_length=20)
 
     def __str__(self):
         return self.name
 
 
-class Language(models.Model):
+class Language(HasParent(CV, related_name='languages')):
     switch_level = {
         1: "elementary",
         2: "professional",
@@ -116,11 +116,11 @@ class Language(models.Model):
         return self.switch_level[self.level]
 
 
-class Hobby(models.Model):
+class Hobby(HasParent(CV, related_name='hobbies')):
     name = models.CharField(max_length=20)
 
     class Meta:
-        verbose_name_plural = "Hobbies"
+        verbose_name_plural = 'Hobbies'
 
     def __str__(self):
         return self.name

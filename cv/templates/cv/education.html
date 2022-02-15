@@ -2,7 +2,7 @@
     <p class="r-col-heading cv-right-column-unit">
         EDUCATION
     </p>
-    {% for education in educations %}
+    {% for education in cv.educations.all %}
         <p class="cv-right-column-unit">
             {{ education }} (GPA: {{ education.gpa }})
         </p>

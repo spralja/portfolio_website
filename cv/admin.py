@@ -13,4 +13,5 @@ admin.site.register(Language)
 admin.site.register(Hobby)
 admin.site.register(ResumeParagraph)
 admin.site.register(CV)
+admin.site.register(UserPicture)
 

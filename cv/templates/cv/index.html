@@ -8,14 +8,10 @@
         <table >
             <tr>
                 <th class="cv-left-column">
-                    <img
-                        src="{{ cv.user_picture.url }}"
-                        alt="{{ cv.user_picture.alt_text }}"
-                        width="100%"
-                    >
+                    {% include 'cv/user_picture.html' %}
                 </th>
                 <th class="cv-right-column">
-                    {% include 'cv/name.html' %}
+                    {% include 'cv/user_name.html' %}
                 </th>
             </tr>
             <tr>

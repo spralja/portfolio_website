@@ -25,13 +25,20 @@ class UserPicture(models.Model):
         return self.alt
 
 
+class Resume(models.Model):
+    heading = models.TextField()
+
+    def __str__(self):
+        return self.heading
+
+
 class CV(models.Model):
     name = models.CharField(max_length=DEFAULT_MAX_LENGTH, primary_key=True, default='main')
     user_name = models.TextField()
-    user_heading = models.TextField()
     user_picture = models.ForeignKey(UserPicture, on_delete=models.CASCADE)
     github = models.URLField()
     linkedin = models.URLField()
+    resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -129,8 +136,7 @@ class Hobby(HasParent(CV, related_name='hobbies')):
         return self.name
 
 
-class Resume(HasParent(CV, related_name='resume')):
-    pass
+
 
 
 class Paragraph(HasParent(Resume, related_name='paragraphs')):

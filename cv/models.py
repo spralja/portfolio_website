@@ -104,6 +104,9 @@ class Project(models.Model):
 class TechnicalSkill(HasParent(CV, related_name='technical_skills'), models.Model):
     name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
 
+    class Meta:
+        unique_together = ('parent', 'name')
+
     def __str__(self):
         return self.name
 
@@ -121,11 +124,12 @@ class Language(HasParent(CV, related_name='languages')):
         ELEMENTARY = 1, _("elementary")
         PROFESSIONAL = 2, _("professional")
         FLUENT = 3, _("fluent")
-        BILINGUAL = 4, _("bilingual")
-        NATIVE = 5, _("native")
 
     level = models.IntegerField(choices=Level.choices)
-    name = models.CharField(max_length=DEFAULT_MAX_LENGTH, primary_key=True)
+    name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+
+    class Meta:
+        unique_together = ('parent', 'name')
 
     def __str__(self):
         return f"{self.name} - {self.get_level()}"
@@ -135,10 +139,11 @@ class Language(HasParent(CV, related_name='languages')):
 
 
 class Hobby(HasParent(CV, related_name='hobbies')):
-    name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    name = models.CharField(max_length=20)
 
     class Meta:
         verbose_name_plural = 'Hobbies'
+        unique_together = ('parent', 'name')
 
     def __str__(self):
         return self.name

@@ -3,7 +3,7 @@
         Hobbies:
     </p>
     <p class="cv-left-column-unit">
-        {% for hobby in hobbies %}
+        {% for hobby in cv.hobbies.all %}
             {{ hobby }},
         {% endfor %}
     </p>

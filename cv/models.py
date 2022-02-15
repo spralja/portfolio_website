@@ -26,7 +26,10 @@ class UserPicture(models.Model):
 
 
 class Resume(models.Model):
-    heading = models.TextField()
+    heading = models.CharField(max_length=20, primary_key=True)
+
+    class Meta:
+        verbose_name = 'Résumé'
 
     def __str__(self):
         return self.heading
@@ -68,6 +71,7 @@ class Description(HasParent(Experience, related_name='descriptions')):
 class Education(HasParent(CV, related_name='educations')):
     authority = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    major = models.CharField(max_length=20)
     gpa = models.FloatField(validators=[MinValueValidator(-3.0), MaxValueValidator(12.0)])
     start_time = models.DateField()
     end_time = models.DateField()
@@ -88,17 +92,14 @@ class Course(HasParent(Education, related_name='courses')):
         return f"{self.name} - {self.description}"
 
 
-class Project(models.Model):
-    parent = models.ForeignKey(Education, on_delete=models.CASCADE, related_name='projects')
-    name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    description = models.CharField(max_length=DEFAULT_MAX_LENGTH, blank=True, null=True)
+class Project(HasParent(Education, related_name='projects')):
+    title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+
+    class Meta:
+        unique_together = ('parent', 'title')
 
     def __str__(self):
-        string = "%s" % self.name
-        if self.description is None:
-            return string
-
-        return string + " - %s" % self.description
+        return self.title
 
 
 class TechnicalSkill(HasParent(CV, related_name='technical_skills'), models.Model):

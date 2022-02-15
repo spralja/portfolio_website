@@ -5,7 +5,7 @@
 
     {% for education in cv.educations.all %}
         <p class="cv-right-column-unit">
-            {{ education }} (GPA: {{ education.gpa }})
+            {{ education.authority }} - {{ education.title }} (GPA: {{ education.gpa }})
         </p>
 
         <p class="cv-right-column-unit">
@@ -17,7 +17,7 @@
         </p>
 
         {% for project in education.projects.all %}
-            <li class="cv-right-column-unit">{{ project }}</li>
+            <li class="cv-right-column-unit">{{ project.title }}</li>
         {% endfor %}
 
         <p class="edu-heading cv-right-column-unit">

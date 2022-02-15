@@ -30,6 +30,8 @@ class CV(models.Model):
     user_name = models.TextField()
     user_heading = models.TextField()
     user_picture = models.ForeignKey(UserPicture, on_delete=models.CASCADE)
+    github = models.URLField()
+    linkedin = models.URLField()
 
     def __str__(self):
         return self.name

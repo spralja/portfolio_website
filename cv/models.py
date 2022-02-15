@@ -47,11 +47,15 @@ class CV(models.Model):
 class Experience(HasParent(CV, related_name='experiences')):
     authority = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField(null=True)
+    start_time = models.DateField()
+    end_time = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.authority} - {self.title}"
+
+    def get_time_frame(self):
+        return f"{self.start_time.strftime('%B %Y')} - " \
+               f"{self.end_time.strftime('%B %Y') if self.end_time is not None else ''}"
 
 
 class Description(HasParent(Experience, related_name='descriptions')):
@@ -65,11 +69,15 @@ class Education(HasParent(CV, related_name='educations')):
     authority = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     gpa = models.FloatField(validators=[MinValueValidator(-3.0), MaxValueValidator(12.0)])
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField(null=True)
+    start_time = models.DateField()
+    end_time = models.DateField()
 
     def __str__(self):
         return f"{self.authority} - {self.title}"
+
+    def get_time_frame(self):
+        return f"{self.start_time.strftime('%B %Y')} - " \
+               f"{self.end_time.strftime('%B %Y') if self.end_time is not None else ''}"
 
 
 class Course(HasParent(Education, related_name='courses')):
@@ -134,9 +142,6 @@ class Hobby(HasParent(CV, related_name='hobbies')):
 
     def __str__(self):
         return self.name
-
-
-
 
 
 class Paragraph(HasParent(Resume, related_name='paragraphs')):

@@ -3,13 +3,11 @@
         EXPERIENCE
     </p>
     <ul>
-        {% for experience in experiences %}
+        {% for experience in cv.experiences.all %}
             <p class="experience experience-auth-title">{{ experience }}</p>
             <p class="experience">{{ experience.get_time_frame }}</p>
-            {% for description in descriptions %}
-                {% if description.experience == experience %}
+            {% for description in experience.descriptions.all %}
                     <li>{{ description }}</li>
-                {% endif %}
             {% endfor %}
         {% endfor %}
     </ul>

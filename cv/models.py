@@ -2,7 +2,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-DEFAULT_MAX_LENGTH = 200
+DEFAULT_MAX_LENGTH = 255
 
 
 def HasParent(cls, *, related_name, on_delete=models.CASCADE, **options):
@@ -17,6 +17,13 @@ def HasParent(cls, *, related_name, on_delete=models.CASCADE, **options):
     })
 
 
+class HasShown(models.Model):
+    shown = models.BooleanField(default=True)
+
+    class Meta:
+        abstract = 'True'
+
+
 class UserPicture(models.Model):
     url = models.URLField()
     alt = models.CharField(max_length=DEFAULT_MAX_LENGTH)
@@ -26,7 +33,7 @@ class UserPicture(models.Model):
 
 
 class Resume(models.Model):
-    heading = models.CharField(max_length=20, primary_key=True)
+    heading = models.CharField(max_length=DEFAULT_MAX_LENGTH, primary_key=True)
 
     class Meta:
         verbose_name = 'Résumé'
@@ -37,7 +44,7 @@ class Resume(models.Model):
 
 class CV(models.Model):
     name = models.CharField(max_length=DEFAULT_MAX_LENGTH, primary_key=True, default='main')
-    user_name = models.TextField()
+    user_name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     user_picture = models.ForeignKey(UserPicture, on_delete=models.CASCADE)
     github = models.URLField()
     linkedin = models.URLField()
@@ -71,7 +78,7 @@ class Description(HasParent(Experience, related_name='descriptions')):
 class Education(HasParent(CV, related_name='educations')):
     authority = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    major = models.CharField(max_length=20)
+    major = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     gpa = models.FloatField(validators=[MinValueValidator(-3.0), MaxValueValidator(12.0)])
     start_time = models.DateField()
     end_time = models.DateField()
@@ -140,7 +147,7 @@ class Language(HasParent(CV, related_name='languages')):
 
 
 class Hobby(HasParent(CV, related_name='hobbies')):
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
 
     class Meta:
         verbose_name_plural = 'Hobbies'

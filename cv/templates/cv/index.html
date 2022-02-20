@@ -5,27 +5,34 @@
         <title>Curriculum vitae</title>
     </head>
     <body>
-        <table >
-            <tr>
-                <th class="cv-left-column">
-                    {% include 'cv/user_picture.html' %}
-                </th>
-                <th class="cv-right-column">
-                    {% include 'cv/user_name.html' %}
-                </th>
-            </tr>
-            <tr>
-                <th class="cv-left-column">
-                    {% include 'cv/resume.html' %}
-                    {% include 'cv/technical_skills.html' %}
-                    {% include 'cv/languages.html' %}
-                    {% include 'cv/hobbies.html' %}
-                </th>
-                <th class="cv-right-column">
-                    {% include 'cv/education.html' %}
-                    {% include 'cv/experience.html' %}
-                </th>
-            </tr>
+        <table class="cv-main-table">
+            <colgroup>
+                <col span="1" style="width: 33%">
+                <col span="1" style="width: 67%">
+            </colgroup>
+
+            <tbody>
+                <tr>
+                    <th id="user-picture">
+                        {% include 'cv/user_picture.html' %}
+                    </th>
+                    <th id="user-name">
+                        {% include 'cv/user_name.html' %}
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        {% include 'cv/resume.html' %}
+                        {% include 'cv/technical_skills.html' %}
+                        {% include 'cv/languages.html' %}
+                        {% include 'cv/hobbies.html' %}
+                    </th>
+                    <th>
+                        {% include 'cv/education.html' %}
+                        {% include 'cv/experience.html' %}
+                    </th>
+                </tr>
+            </tbody>
         </table>
 
         {% include 'cv/body.html' %}

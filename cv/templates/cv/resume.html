@@ -1,10 +1,12 @@
-<div class="resume">
-    <p class="resume-heading heading cv-left-column-unit">
-    	{{ cv.resume.heading }}:
+<div id="resume">
+    <p>
+        {{ cv.resume.heading }}:
     </p>
-    {% for paragraph in cv.resume.paragraphs.all %}
-        <p class="resume-paragraph cv-left-column-unit">
-            {{ paragraph }}
-        </p>
-    {% endfor %}
+    <ul>
+        {% for paragraph in cv.resume.paragraphs.all %}
+            <li>
+                {{ paragraph }}
+            </li>
+        {% endfor %}
+    </ul>
 </div>

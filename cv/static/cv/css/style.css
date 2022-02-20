@@ -1,44 +1,32 @@
-th {
-    font-weight: normal;
+.cv-main-table {
+    --size: 5%;
+    margin: var(--size) var(--size) var(--size) var(--size);
 }
 
-.cv-left-column {
-    width:25%;
-    vertical-align: text-top;
+
+#user-picture {
+    text-align: center;
 }
 
-.cv-left-column-unit {
-    margin: 0px 0px 0px 0px;
-    padding: 2.5% 5% 2.5% 5%;
+#user-picture-img {
+
+    --size: 50%;
+    border-radius: 50%;
+    width: var(--size);
+    height: var(--size);
 }
 
-.heading {
-    font-weight: bold;
+#user-name {
+
 }
 
-.resume {
-    margin: 4% 4% 4% 4%;
-    outline: 2px solid black;
+#user-name-h1 {
+    position: relative;
+    left: 7%;
+    font-size: 400%;
 }
 
-.resume-heading {
-    font-size: 18px;
-}
 
-.cv-right-column {
-    width:75%;
-    vertical-align: text-top;
-}
-
-cv-right-column-unit {
-    margin: 0px 0px 0px 0px;
-    padding: 2.5% 5% 2.5% 10%;
-}
-
-.r-col-heading {
-    font-size: 24px;
-}
-
-.edu-heading {
-    font-weight: bold;
+#resume {
+   border: 2px solid;
 }

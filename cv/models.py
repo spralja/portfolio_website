@@ -5,13 +5,6 @@ from django.utils.translation import gettext_lazy as _
 DEFAULT_MAX_LENGTH = 255
 
 
-def not_implemented(self):
-    raise NotImplementedError(f'{self.__class__.__qualname__}.__str__ is not implemented')
-
-
-setattr(models.Model, '__str__', not_implemented)
-
-
 class User(models.Model):
     name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     github = models.URLField()

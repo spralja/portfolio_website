@@ -3,68 +3,11 @@
 <html lang="en">
 <head>
     <title>Portfolio</title>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="blog, accent, , Researcher, jekyll">
-    <meta name="author" content="">
-
-
-
-    <meta name="description" content="A jekyll based resume template">
-    <link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
-    <link rel="alternate" type="application/rss+xml" title="Researcher RSS" href="/feed.xml" />
-
     {% include 'main/head.html' %}
-
-
-    <!-- Facebook Open Graph -->
-    <meta name="og:description" content="A jekyll based resume template">
-    <meta name="og:title" content="Researcher">
-    <meta name="og:url" content="https://ankitsultana.com/researcher/contact.html">
-    <meta name="og:type" content="article">
-
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Researcher">
-    <meta name="twitter:description" content="A jekyll based resume template">
-    <meta name="twitter:url" content="https://ankitsultana.com/researcher/contact.html">
-
-        <meta name="twitter:image" content="">
-
 </head>
 <body>
     <div class="wrapper">
-        <div class="navbar container">
-
-            <a id="author-name" class="alignable pull-left" href="../">Portfolio</a>
-            <ul id="navlist" class="alignable pull-right navbar-ul">
-
-
-                        <li class="alignable pull-left nav-list"><a href="../">About</a>
-
-
-                        /
-
-                        </li>
-
-
-                        <li class="alignable pull-left nav-list"><a target="_blank" href="resume.pdf">Resume</a>
-
-
-                        /
-
-                        </li>
-
-
-                        <li class="alignable pull-left nav-list"><a href="contact">Contact</a>
-
-
-                        </li>
-
-            </ul>
-        </div>
+        {% include 'main/navbar.html' %}
         <div style="clear:both"></div>
         <hr>
 
@@ -95,6 +38,4 @@
             </div>
     </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
-<footer>
-</footer>
+</body>

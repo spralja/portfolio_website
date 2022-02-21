@@ -5,22 +5,43 @@ from django.utils.translation import gettext_lazy as _
 DEFAULT_MAX_LENGTH = 255
 
 
+class Picture(models.Model):
+    url = models.URLField()
+    alt = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+
+    def __str__(self):
+        return self.alt
+
+
 class User(models.Model):
     name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    github = models.URLField()
-    linkedin = models.URLField()
+    about_me = models.TextField(blank=True)
+    picture = models.OneToOneField(Picture, on_delete=models.CASCADE, null=True)
+    email = models.EmailField(null=True)
+    github = models.URLField(null=True)
+    linkedin = models.URLField(null=True)
 
     def __str__(self):
         return self.name
 
 
-def HasParent(cls, *, related_name, field_name='parent' ,on_delete=models.CASCADE, **options):
+class Project(models.Model):
+    user = models.ForeignKey(User, related_name='projects', on_delete=models.CASCADE)
+    title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    url = models.URLField(blank=True)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.title
+
+
+def HasParent(cls, *, related_name,on_delete=models.CASCADE, **options):
     Meta = type(related_name + 'Meta', (), {
         'abstract': 'True',
     })
 
     return type(related_name, (models.Model,), {
-        field_name: models.ForeignKey(cls, on_delete=on_delete, related_name=related_name, **options),
+        cls.__name__.lower(): models.ForeignKey(cls, on_delete=on_delete, related_name=related_name, **options),
         'Meta': Meta,
         '__module__': __name__,
     })
@@ -33,12 +54,7 @@ class HasShown(models.Model):
         abstract = 'True'
 
 
-class Picture(HasParent(User, related_name='pictures')):
-    url = models.URLField()
-    alt = models.CharField(max_length=DEFAULT_MAX_LENGTH)
 
-    def __str__(self):
-        return self.alt
 
 
 class Resume(HasParent(User, related_name='resumes')):
@@ -95,18 +111,11 @@ class Course(HasParent(Education, related_name='courses')):
         return self.name
 
 
-class Project(HasParent(Education, related_name='projects')):
-    title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
 
-    def __str__(self):
-        return self.title
 
 
 class TechnicalSkill(HasParent(User, related_name='technical_skills', null=True), models.Model):
     name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-
-    class Meta:
-        unique_together = ('parent', 'name')
 
     def __str__(self):
         return self.name
@@ -129,8 +138,7 @@ class Language(HasParent(User, related_name='languages', null=True)):
     level = models.IntegerField(choices=Level.choices)
     name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
 
-    class Meta:
-        unique_together = ('parent', 'name')
+
 
     def __str__(self):
         return f"{self.name} - {self.get_level()}"
@@ -144,7 +152,6 @@ class Hobby(HasParent(User, related_name='hobbies', null=True)):
 
     class Meta:
         verbose_name_plural = 'Hobbies'
-        unique_together = ('parent', 'name')
 
     def __str__(self):
         return self.name
@@ -157,9 +164,8 @@ class Paragraph(HasParent(Resume, related_name='paragraphs')):
         return self.paragraph
 
 
-class CV(HasParent(User, field_name='user', related_name='cvs')):
+class CV(HasParent(User, related_name='cvs')):
     name = models.CharField(max_length=DEFAULT_MAX_LENGTH, primary_key=True, default='main')
-    user_picture = models.ForeignKey(Picture, on_delete=models.CASCADE)
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
     technical_skills = models.ManyToManyField(TechnicalSkill, blank=True)
     languages = models.ManyToManyField(Language, blank=True)

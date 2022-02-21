@@ -4,22 +4,29 @@ from django.template import loader
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .models import CV
+from .models import User
 from .serializers import ExperienceSerializer, EducationSerializer, CVSerializer
 
 
-def index(request, cv_name='main'):
+def index(request):
     template = loader.get_template('main/index.html')
-    cv = CV.objects.filter(name=cv_name).first()
-    if cv is None:
-        raise Http404('Cv does not exist')
-
+    user = User.objects.first()
     context = {
-        'main': cv,
+        'user': user,
     }
 
     return HttpResponse(template.render(context, request))
 
+
+def contact(request):
+    template = loader.get_template('main/contact.html')
+    user = User.objects.first()
+
+    context = {
+        'user': user,
+    }
+
+    return HttpResponse(template.render(context, request))
 
 class ExperienceAPIView(APIView):
     def get(self, request, name='main'):

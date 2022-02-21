@@ -2,8 +2,10 @@ from django.contrib import admin
 
 from .models import *
 
+admin.site.register(User)
+
 admin.site.register(CV)
-admin.site.register(UserPicture)
+admin.site.register(Picture)
 admin.site.register(Resume)
 admin.site.register(Paragraph)
 

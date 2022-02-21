@@ -5,13 +5,29 @@ from django.utils.translation import gettext_lazy as _
 DEFAULT_MAX_LENGTH = 255
 
 
-def HasParent(cls, *, related_name, on_delete=models.CASCADE, **options):
+def not_implemented(self):
+    raise NotImplementedError(f'{self.__class__.__qualname__}.__str__ is not implemented')
+
+
+setattr(models.Model, '__str__', not_implemented)
+
+
+class User(models.Model):
+    name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    github = models.URLField()
+    linkedin = models.URLField()
+
+    def __str__(self):
+        return self.name
+
+
+def HasParent(cls, *, related_name, field_name='parent' ,on_delete=models.CASCADE, **options):
     Meta = type(related_name + 'Meta', (), {
         'abstract': 'True',
     })
 
     return type(related_name, (models.Model,), {
-        'parent': models.ForeignKey(cls, on_delete=on_delete, related_name=related_name, **options),
+        field_name: models.ForeignKey(cls, on_delete=on_delete, related_name=related_name, **options),
         'Meta': Meta,
         '__module__': __name__,
     })
@@ -24,7 +40,7 @@ class HasShown(models.Model):
         abstract = 'True'
 
 
-class UserPicture(models.Model):
+class Picture(HasParent(User, related_name='pictures')):
     url = models.URLField()
     alt = models.CharField(max_length=DEFAULT_MAX_LENGTH)
 
@@ -32,7 +48,7 @@ class UserPicture(models.Model):
         return self.alt
 
 
-class Resume(models.Model):
+class Resume(HasParent(User, related_name='resumes')):
     heading = models.CharField(max_length=DEFAULT_MAX_LENGTH, primary_key=True)
 
     class Meta:
@@ -42,19 +58,7 @@ class Resume(models.Model):
         return self.heading
 
 
-class CV(models.Model):
-    name = models.CharField(max_length=DEFAULT_MAX_LENGTH, primary_key=True, default='main')
-    user_name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    user_picture = models.ForeignKey(UserPicture, on_delete=models.CASCADE)
-    github = models.URLField()
-    linkedin = models.URLField()
-    resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.name
-
-
-class Experience(HasParent(CV, related_name='experiences')):
+class Experience(HasParent(User, related_name='experiences')):
     authority = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     start_time = models.DateField()
@@ -69,13 +73,13 @@ class Experience(HasParent(CV, related_name='experiences')):
 
 
 class Description(HasParent(Experience, related_name='descriptions')):
-    description = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    description = models.TextField(primary_key=True)
 
     def __str__(self):
         return self.description
 
 
-class Education(HasParent(CV, related_name='educations')):
+class Education(HasParent(User, related_name='educations')):
     authority = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     major = models.CharField(max_length=DEFAULT_MAX_LENGTH)
@@ -92,24 +96,20 @@ class Education(HasParent(CV, related_name='educations')):
 
 
 class Course(HasParent(Education, related_name='courses')):
-    name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    description = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    name = models.CharField(primary_key=True, max_length=DEFAULT_MAX_LENGTH)
 
     def __str__(self):
-        return f"{self.name} - {self.description}"
+        return self.name
 
 
 class Project(HasParent(Education, related_name='projects')):
     title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
 
-    class Meta:
-        unique_together = ('parent', 'title')
-
     def __str__(self):
         return self.title
 
 
-class TechnicalSkill(HasParent(CV, related_name='technical_skills'), models.Model):
+class TechnicalSkill(HasParent(User, related_name='technical_skills', null=True), models.Model):
     name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
 
     class Meta:
@@ -119,7 +119,7 @@ class TechnicalSkill(HasParent(CV, related_name='technical_skills'), models.Mode
         return self.name
 
 
-class Language(HasParent(CV, related_name='languages')):
+class Language(HasParent(User, related_name='languages', null=True)):
     switch_level = {
         1: "elementary",
         2: "professional",
@@ -146,7 +146,7 @@ class Language(HasParent(CV, related_name='languages')):
         return self.switch_level[self.level]
 
 
-class Hobby(HasParent(CV, related_name='hobbies')):
+class Hobby(HasParent(User, related_name='hobbies', null=True)):
     name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
 
     class Meta:
@@ -162,3 +162,21 @@ class Paragraph(HasParent(Resume, related_name='paragraphs')):
 
     def __str__(self):
         return self.paragraph
+
+
+class CV(HasParent(User, field_name='user', related_name='cvs')):
+    name = models.CharField(max_length=DEFAULT_MAX_LENGTH, primary_key=True, default='main')
+    user_picture = models.ForeignKey(Picture, on_delete=models.CASCADE)
+    resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
+    technical_skills = models.ManyToManyField(TechnicalSkill, blank=True)
+    languages = models.ManyToManyField(Language, blank=True)
+    hobbies = models.ManyToManyField(Hobby, blank=True)
+    educations = models.ManyToManyField(Education, blank=True)
+    experiences = models.ManyToManyField(Experience, blank=True)
+
+    class Meta:
+        verbose_name = 'Curriculum Vitae'
+        verbose_name_plural = 'Curricula Vitae'
+
+    def __str__(self):
+        return self.name

@@ -38,9 +38,7 @@ jobs:
           DB_PASS: ${{ secrets.DB_PASS }}
           DB_HOST: ${{ secrets.DB_HOST }}
           DEBUG: ${{ secrets.DEBUG }}
-        run: |
-          python manage.py collectstatic
-          python manage.py test
+        run: python manage.py test
       
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v2

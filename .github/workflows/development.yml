@@ -10,6 +10,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    environment: development
     strategy:
       max-parallel: 1
       matrix:
@@ -27,5 +28,4 @@ jobs:
         pip install -r requirements.txt
     - name: Run Tests
       run: |
-        environment: development
         python manage.py test

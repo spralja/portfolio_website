@@ -10,6 +10,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    environment: development
     strategy:
       max-parallel: 1
       matrix:
@@ -26,12 +27,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Run Tests
-      run: |
-        env:
-          SECRET_KEY: ${{ development.SECRET_KEY }}
-          DB_NAME: ${{ development.DB_NAME }}
-          DB_USER: ${{ development.DB_USER }}
-          DB_PASS: ${{ development.DB_PASS }}
-          DB_HOST: ${{ development.DB_HOST }}
-          DEBUG: 'True'
-        python manage.py test
+      env:
+        SECRET_KEY: $SECRET_KEY
+        DB_NAME: $DB_NAME
+        DB_HOST: $DB_HOST
+        DB_USER: $DB_USER
+        DB_PASS: $DB_PASS
+        DEBUG: 'True'
+      run: python manage.py test

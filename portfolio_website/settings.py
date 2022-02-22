@@ -27,7 +27,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [os.environ['HOST']]
 
 
 # Application definition
@@ -135,4 +135,4 @@ STATICFILE_STORAGE = 'whitenoise.storage.CompressManifestStaticFileStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CSRF_TRUSTED_ORIGINS = ['https://spralja-portfolio.azurewebsites.net']
+CSRF_TRUSTED_ORIGINS = [os.environ['HOST']]

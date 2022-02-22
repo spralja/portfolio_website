@@ -130,7 +130,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'static'
-STATICFILE_STORAGE = 'whitenoise.storage.CompressManifestStaticFileStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressManifestStaticFileStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

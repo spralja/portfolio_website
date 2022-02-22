@@ -30,7 +30,17 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
         
-      # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
+      - name: Migrate and Test
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+        run: |
+          python manage.py makemigrations
+          python manage.py migrate
+          python manage.py test
       
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v2

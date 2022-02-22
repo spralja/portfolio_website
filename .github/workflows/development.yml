@@ -29,5 +29,9 @@ jobs:
     - name: Run Tests
       env:
         SECRET_KEY: $SECRET_KEY
-      run: |
-        python manage.py test
+        DB_NAME: $DB_NAME
+        DB_HOST: $DB_HOST
+        DB_USER: $DB_USER
+        DB_PASS: $DB_PASS
+        DEBUG: 'True'
+      run: python manage.py test

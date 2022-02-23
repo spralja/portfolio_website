@@ -68,4 +68,4 @@ jobs:
         with:
           app-name: 'spralja-portfolio'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D9889853CDC7402DAFF226C0632EA1A5 }}
+          publish-profile: $AZURE_WEBAPP_PUBLISH_PROFILE

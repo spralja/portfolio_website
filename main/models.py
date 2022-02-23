@@ -12,10 +12,6 @@ class Picture(models.Model):
     def __str__(self):
         return self.alt
 
-    @property
-    def thumbnail_preview(self):
-        return mark_safe(f'<img src={self.url} witdth="300" height="300')
-
 
 class User(models.Model):
     name = models.CharField(max_length=DEFAULT_MAX_LENGTH)

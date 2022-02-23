@@ -1,42 +1,42 @@
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <title>Portfolio</title>
-    {% include 'main/head.html' %}
-</head>
-<body>
-    <div class="wrapper">
-        {% include 'main/navbar.html' %}
-        <div style="clear:both"></div>
-        <hr>
-
+    <head>
+        <title>Portfolio</title>
+        {% include 'main/head.html' %}
+    </head>
+    <body>
+        <div class="wrapper">
+            {% include 'main/navbar.html' %}
+            <div style="clear:both"></div>
+            <hr>
             <div class="container content contact">
-
                 <ul>
-  <li>
-    <p>Email: <a href="mailto:robert.spralja@gmail.com"><span>{{ user.email }}</span></a></p>
-  </li>
-</ul>
-
-
-<hr />
-
-<h2 id="social">Social</h2>
-
-<ol>
-  <li><a href="{{ user.github }}">Github</a></li>
-  <li><a href="{{ user.gitlab }}">Gitlab</a></li>
-  <li><a href="{{ user.linkedin }}">LinkedIn</a></li>
-</ol>
-
-
-                    <hr />
-                    <p style="text-align: center; margin-bottom: 10px">
+                    <li>
+                        <p>
+                            Email: 
+                            <a href="mailto:{{ user.email }}">
+                                <span>
+                                    {{ user.email }}
+                                </span>
+                            </a>
+                        </p>
+                    </li>
+                </ul>
+            
+                <hr>
+                <h2 id="social">
+                    Social
+                </h2>
+                <ol>
+                    <li><a href="{{ user.github }}">Github</a></li>
+                    <li><a href="{{ user.gitlab }}">Gitlab</a></li>
+                    <li><a href="{{ user.linkedin }}">LinkedIn</a></li>
+                </ol>
+                <hr>
+                <p style="text-align: center; margin-bottom: 10px">
                     <a href="https://github.com/spralja" style="color: black"><small>Portfolio for Robert Spralja</small></a>
-                    </p>
-
+                </p>
             </div>
-    </div>
-
-</body>
+        </div>
+    </body>
+</html>

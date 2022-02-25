@@ -39,6 +39,12 @@ jobs:
           DB_PASS: $DB_PASS
           DB_HOST: $DB_HOST
         run: python manage.py test
+        
+      - name: Create migrations
+        run: python manage.py makemigrations
+        
+      - name: Migrate
+        run: python manage.py migrate
       
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v2

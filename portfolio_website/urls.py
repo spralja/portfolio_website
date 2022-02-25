@@ -22,4 +22,5 @@ from . import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
+    path('path-finding-algorithms/', include('path_finding_algorithms.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

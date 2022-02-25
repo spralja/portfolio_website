@@ -1,4 +1,4 @@
-from rest_framework import serializers
+from portfolio_website import serializers
 from .models import TechnicalSkill, Language, Experience, Education, Hobby, Course, Project
 
 DEFAULT_MAX_LENGTH = 255

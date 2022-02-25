@@ -28,6 +28,14 @@ def contact(request):
 
     return HttpResponse(template.render(context, request))
 
+
+class ProjectAPIView(APIView):
+    def get(serf, request):
+        projects = Project.objects.all()
+        serializer = ProjectSerializer(projects, many=True)
+        return Response(serializer.data)
+
+
 class ExperienceAPIView(APIView):
     def get(self, request, name='main'):
         experiences = CV.objects.filter(name=name).first().experiences.all()
@@ -48,3 +56,5 @@ class CVAPIView(APIView):
         cv = CV.objects.filter(name=name).first()
         serializer = CVSerializer(cv)
         return Response(serializer.data)
+
+

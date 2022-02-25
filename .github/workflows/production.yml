@@ -41,9 +41,21 @@ jobs:
         run: python manage.py test
         
       - name: Create migrations
+        env:
+          SECRET_KEY: $SECRET_KEY
+          DB_NAME: $DB_NAME
+          DB_USER: $DB_USER
+          DB_PASS: $DB_PASS
+          DB_HOST: $DB_HOST
         run: python manage.py makemigrations
         
       - name: Migrate
+        env:
+          SECRET_KEY: $SECRET_KEY
+          DB_NAME: $DB_NAME
+          DB_USER: $DB_USER
+          DB_PASS: $DB_PASS
+          DB_HOST: $DB_HOST
         run: python manage.py migrate
       
       - name: Upload artifact for deployment jobs

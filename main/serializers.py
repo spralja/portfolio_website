@@ -5,7 +5,14 @@ DEFAULT_MAX_LENGTH = 255
 
 class ProjectSerializer(serializers.Serializer):
     title = serializers.CharField()
-    description = serializers.CharField()
+    description = serializers.MarkdownField()
+
+    def update(self, instance, validated_data):
+        pass
+
+    def create(self, validated_data):
+        pass
+
 
 class TechnicalSkillSerializer(serializers.ModelSerializer):
     class Meta:
@@ -29,12 +36,6 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ('name',)
-
-
-class ProjectSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Project
-        fields = ('title',)
 
 
 class EducationSerializer(serializers.Serializer):

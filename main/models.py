@@ -41,6 +41,16 @@ class Project(models.Model):
         return markdown(self.description)
 
 
+class StaticWebsiteManager(models.Manager):
+    pass
+
+
+class StaticWebsite(models.Model):
+    remote = models.URLField()
+
+    objects = StaticWebsiteManager
+
+
 def HasParent(cls, *, related_name,on_delete=models.CASCADE, **options):
     Meta = type(related_name + 'Meta', (), {
         'abstract': 'True',

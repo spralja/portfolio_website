@@ -23,14 +23,14 @@
                     GitHub
                 </a>
             </p>
-            {% for project in user.projects.all %}
+        {% for project in user.projects.all %}
                 <a href="{{ project.url }}">
                     <h2>
                         {{ project }}
                     </h2>
                 </a>
                 <p>
-                    {{ project.description }}
+                    {{ project.get_description | safe }}
                 </p>
             {% endfor %}
             {% include 'main/footer.html' %}

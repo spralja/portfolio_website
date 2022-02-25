@@ -3,5 +3,5 @@ from markdown import markdown
  
 
 class MarkdownField(CharField):
-    def to_representation(self, value):
-        return markdown.markdown(value)
+    def to_representation(self, obj):
+        return {'title': obj.title, 'description': markdown(obj.description)}

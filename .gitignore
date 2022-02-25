@@ -1,4 +1,4 @@
 *.pyc
 static/
 
-*.sqilite3
+*.sqlite3

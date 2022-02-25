@@ -30,7 +30,7 @@
                     </h2>
                 </a>
                 <p>
-                    {{ project.description }}
+                    {{ project.get_description | safe}}
                 </p>
             {% endfor %}
             {% include 'main/footer.html' %}

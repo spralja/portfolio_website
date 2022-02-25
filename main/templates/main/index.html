@@ -17,12 +17,6 @@
             <p>
                 {{ user.about_me }}
             </p>
-            <p>
-                This is a based on a jekyll based resume template. You can find the full source code on of the template on
-                <a href="https://github.com/bk2dcradle/researcher">
-                    GitHub
-                </a>
-            </p>
             {% for project in user.projects.all %}
                 <a href="{{ project.url }}">
                     <h2>

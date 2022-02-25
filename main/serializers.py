@@ -3,6 +3,9 @@ from .models import TechnicalSkill, Language, Experience, Education, Hobby, Cour
 
 DEFAULT_MAX_LENGTH = 255
 
+class ProjectSerializer(serializers.Serializer):
+    title = serializers.CharField()
+    description = serializers.CharField()
 
 class TechnicalSkillSerializer(serializers.ModelSerializer):
     class Meta:

@@ -27,6 +27,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 
 DEBUG = (os.environ.get('DEBUG') == 'True')
+DB_DEBUG = (os.environ.get('DB_DEBUG') == 'True')
 
 ALLOWED_HOSTS = ['*']
 
@@ -82,7 +83,7 @@ WSGI_APPLICATION = 'portfolio_website.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3' if os.environ['DB_DEBUG'] == 'True' else 'django.db.backends.postgressql',
+        'ENGINE': 'django.db.backends.sqlite3' if os.environ['DB_DEBUG'] == 'True' else 'django.db.backends.postgresql',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3') if os.environ['DB_DEBUG'] == 'True' else os.environ['DB_NAME'],
         'USER': os.environ['DB_USER'],
         'PASSWORD': os.environ['DB_PASS'],

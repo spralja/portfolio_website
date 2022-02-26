@@ -3,6 +3,7 @@ from portfolio_website import models
 from django.utils.translation import gettext_lazy as _
 
 from markdown import markdown
+from github import Github
 
 DEFAULT_MAX_LENGTH = 255
 
@@ -32,7 +33,10 @@ class Project(models.Model):
     user = models.ForeignKey(User, related_name='projects', on_delete=models.CASCADE)
     title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     url = models.URLField(blank=True)
+    name = models.CharField(max_length=DEFAULT_MAX_LENGTH, unique=True, null=True)
     description = models.MarkdownField(blank=True)
+    github_user_name = models.CharField(blank=True, max_length=DEFAULT_MAX_LENGTH)
+    github_repo = models.CharField(blank=True, max_length=DEFAULT_MAX_LENGTH)
 
     def __str__(self):
         return self.title
@@ -40,6 +44,35 @@ class Project(models.Model):
     def get_description(self):
         return markdown(self.description)
 
+    def get_index(self):
+        g = Github()
+        repo = g.get_user(self.github_user_name).get_repo(self.github_repo)
+        file = repo.get_contents('index.html')
+        return file.decoded_content.decode()
+
+    def get_static(self, static):
+        g = Github()
+        repo = g.get_user(self.github_user_name).get_repo(self.github_repo)
+        file = repo.get_contents(static)
+        return file.decoded_content.decode()
+
+
+class Html(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    index = models.TextField()
+
+
+class Static(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    name = models.TextField()
+    static = models.TextField()
+
+    class Meta:
+        pass
+        #unique_together = ('project', 'name')
+
+    def __str__(self):
+        return self.name
 
 def HasParent(cls, *, related_name,on_delete=models.CASCADE, **options):
     Meta = type(related_name + 'Meta', (), {

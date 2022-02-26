@@ -107,26 +107,7 @@ class StaticFile(models.Model):
 
     class Meta:
         unique_together = ('static_website', 'name')
-
-
-
-class Html(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='htmls')
-    index = models.TextField()
-
-
-class Static(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='statics')
-    name = models.TextField()
-    static = models.TextField()
-
-    class Meta:
-        pass
-        #unique_together = ('project', 'name')
-
-    def __str__(self):
-        return self.name
-
+        
 
 def HasParent(cls, *, related_name,on_delete=models.CASCADE, **options):
     Meta = type(related_name + 'Meta', (), {

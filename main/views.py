@@ -4,7 +4,7 @@ from django.template import loader
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .models import User, Project, Html, Static
+from .models import User, Project
 from .serializers import ExperienceSerializer, EducationSerializer, CVSerializer
 
 

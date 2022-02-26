@@ -3,7 +3,6 @@ from portfolio_website import models
 from django.utils.translation import gettext_lazy as _
 
 from markdown import markdown
-from git import Repo
 
 DEFAULT_MAX_LENGTH = 255
 
@@ -29,23 +28,11 @@ class User(models.Model):
         return self.name
 
 
-class StaticWebsite(models.Model):
-    remote = models.URLField()
-    name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    tracked = models.CharField(max_length=DEFAULT_MAX_LENGTH, default='main')
-
-    def get_url(self):
-        Repo.clone_from(self.remote, 'main/static/main/staticwebsites/' + self.name)
-        return '/static/main/staticwebsites/' + self.name + '/index.html'
-
-
 class Project(models.Model):
     user = models.ForeignKey(User, related_name='projects', on_delete=models.CASCADE)
     title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     url = models.URLField(blank=True)
     description = models.MarkdownField(blank=True)
-    name = models.CharField(max_length=DEFAULT_MAX_LENGTH, blank=True, unique=True)
-    static_website = models.OneToOneField(StaticWebsite, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.title

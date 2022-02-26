@@ -2,9 +2,8 @@ from django.urls import path
 
 from . import views
 
-app_name = 'main'
+app_name = 'path_finding_algorithms'
 urlpatterns = [
     path('', views.index, name='index'),
-    path('projects', views.ProjectAPIView.as_view(), name='project')
 ]
 

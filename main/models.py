@@ -32,11 +32,8 @@ class User(models.Model):
 class Project(models.Model):
     user = models.ForeignKey(User, related_name='projects', on_delete=models.CASCADE)
     title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    url = models.URLField(blank=True)
-    name = models.CharField(max_length=DEFAULT_MAX_LENGTH, unique=True, null=True)
+    name = models.CharField(max_length=DEFAULT_MAX_LENGTH, primary_key=True)
     description = models.MarkdownField(blank=True)
-    github_user_name = models.CharField(blank=True, max_length=DEFAULT_MAX_LENGTH)
-    github_repo = models.CharField(blank=True, max_length=DEFAULT_MAX_LENGTH)
 
     def __str__(self):
         return self.title
@@ -57,13 +54,69 @@ class Project(models.Model):
         return file.decoded_content.decode()
 
 
+class Remote(models.Model):
+    project = models.OneToOneField(Project, on_delete=models.CASCADE)
+    organisation = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    repository = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    object = models.CharField(max_length=DEFAULT_MAX_LENGTH, default='main')
+
+    def __str__(self):
+        return str(self.organisation) + '/' + str(self.repository) + '@' + str(self.object)
+
+
+class StaticWebsite(models.Model):
+    remote = models.OneToOneField(Remote, on_delete=models.CASCADE, related_name='static_website')
+
+    def __str__(self):
+        return str(self.remote.project.name) + ' website'
+
+    def collect(self, file='index.html'):
+        print('test\n\n\n\test\n\n')
+        index = self.static_files.filter(name=file).first()
+        print(index)
+        
+        if index:
+            return index
+
+        g = Github()
+        repository = g.get_user(self.remote.organisation).get_repo(self.remote.repository)
+        index = repository.get_contents(file).decoded_content.decode()
+        index = self.static_files.create(static_website=self, name=file, content=index)
+        
+        return index
+
+
+class StaticFile(models.Model):
+    static_website = models.ForeignKey(StaticWebsite, on_delete=models.CASCADE, related_name='static_files')
+    name = models.CharField(max_length=255)
+    content = models.TextField()
+
+    def __str__(self):
+        return self.static_website.remote.project.name + '/' + self.name
+
+    @property
+    def content_type(self):
+        if self.name.split('.')[-1] == 'js':
+            return 'application/javascript'
+        
+        if self.name.split('.')[-1] == 'css':
+            return 'text/css'
+
+        if self.name.split('.')[-1] in ('html', 'htm'):
+            return 'text/html'
+
+    class Meta:
+        unique_together = ('static_website', 'name')
+
+
+
 class Html(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='htmls')
     index = models.TextField()
 
 
 class Static(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='statics')
     name = models.TextField()
     static = models.TextField()
 
@@ -73,6 +126,7 @@ class Static(models.Model):
 
     def __str__(self):
         return self.name
+
 
 def HasParent(cls, *, related_name,on_delete=models.CASCADE, **options):
     Meta = type(related_name + 'Meta', (), {

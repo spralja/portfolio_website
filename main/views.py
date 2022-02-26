@@ -30,25 +30,15 @@ def contact(request):
 
 
 def project(request, name):
-    project = Project.objects.filter(name=name).first()
-    index = Html.objects.filter(project=project).first()
-    if index:
-        return HttpResponse(index.index)
+    static_website = Project.objects.filter(name=name).first().remote.static_website
+    index = static_website.collect()
+    return HttpResponse(index.content, content_type=index.content_type)
 
-    index = project.get_index()
-    
-    Html.objects.create(project=project, index=index)
-    return HttpResponse(index)
 
-def static(request, name, static):
-    project = Project.objects.filter(name=name).first()
-    index = Static.objects.filter(project=project, name=static).first()
-    if index:
-        return HttpResponse(index.static, content_type='application/javascript')
-
-    index = project.get_static(static)
-    Static.objects.create(project=project, name=static, static=index)
-    return HttpResponse(index)
+def subfile(request, name, subfile):
+    static_website = Project.objects.filter(name=name).first().remote.static_website
+    index = static_website.collect(subfile)
+    return HttpResponse(index.content, content_type=index.content_type)
 
 
 

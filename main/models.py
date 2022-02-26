@@ -65,7 +65,7 @@ class Remote(models.Model):
         return str(self.organisation) + '/' + str(self.repository) + '@' + str(self.branch)
 
     def collect(self, name='index.html'):
-        g = Github(GITHUB_API_TOKEN)
+        g = Github(*((GITHUB_API_TOKEN,) if GITHUB_API_TOKEN else ()))
         repository = g.get_user(self.organisation).get_repo(self.repository)
         if not repository.get_commits(since=self.last_accessed).totalCount:
             return self.static_files.filter(name=name).first()

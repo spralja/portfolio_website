@@ -41,7 +41,7 @@ jobs:
           DB_DEBUG: 'False'
         run: |
           python manage.py test
-          python maange.py makemigrations
+          python manage.py makemigrations
           python manage.py migrate
       
       - name: Upload artifact for deployment jobs

@@ -1,12 +1,19 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from portfolio_website import models
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
 
 from markdown import markdown
 from github import Github
 
 DEFAULT_MAX_LENGTH = 255
 
+def NotTakenNameValidator(value):
+    if value in ('contact',):
+        raise ValidationError(
+            _('%(value) name taken'),
+            params={'value': value},
+        )
 
 class Picture(models.Model):
     url = models.URLField()
@@ -32,7 +39,7 @@ class User(models.Model):
 class Project(models.Model):
     user = models.ForeignKey(User, related_name='projects', on_delete=models.CASCADE)
     title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    name = models.CharField(max_length=DEFAULT_MAX_LENGTH, primary_key=True)
+    name = models.CharField(max_length=DEFAULT_MAX_LENGTH, primary_key=True, validators=[NotTakenNameValidator])
     description = models.MarkdownField(blank=True)
 
     def __str__(self):
@@ -107,7 +114,7 @@ class StaticFile(models.Model):
 
     class Meta:
         unique_together = ('static_website', 'name')
-        
+
 
 def HasParent(cls, *, related_name,on_delete=models.CASCADE, **options):
     Meta = type(related_name + 'Meta', (), {

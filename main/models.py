@@ -1,12 +1,23 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from portfolio_website import models
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
+from datetime import datetime
 
 from markdown import markdown
 from github import Github
+from github.Commit import Commit
+
+from portfolio_website.settings import TIME_ZONE, GITHUB_API_TOKEN
 
 DEFAULT_MAX_LENGTH = 255
 
+def NotTakenNameValidator(value):
+    if value in ('contact',):
+        raise ValidationError(
+            _('%(value) name taken'),
+            params={'value': value},
+        )
 
 class Picture(models.Model):
     url = models.URLField()
@@ -32,47 +43,69 @@ class User(models.Model):
 class Project(models.Model):
     user = models.ForeignKey(User, related_name='projects', on_delete=models.CASCADE)
     title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    url = models.URLField(blank=True)
-    name = models.CharField(max_length=DEFAULT_MAX_LENGTH, unique=True, null=True)
-    description = models.MarkdownField(blank=True)
-    github_user_name = models.CharField(blank=True, max_length=DEFAULT_MAX_LENGTH)
-    github_repo = models.CharField(blank=True, max_length=DEFAULT_MAX_LENGTH)
+    name = models.CharField(max_length=DEFAULT_MAX_LENGTH, primary_key=True, validators=[NotTakenNameValidator])
+    _description = models.MarkdownField(blank=True)
 
     def __str__(self):
         return self.title
 
-    def get_description(self):
-        return markdown(self.description)
-
-    def get_index(self):
-        g = Github()
-        repo = g.get_user(self.github_user_name).get_repo(self.github_repo)
-        file = repo.get_contents('index.html')
-        return file.decoded_content.decode()
-
-    def get_static(self, static):
-        g = Github()
-        repo = g.get_user(self.github_user_name).get_repo(self.github_repo)
-        file = repo.get_contents(static)
-        return file.decoded_content.decode()
+    @property
+    def description(self):
+        return markdown(self._description)
 
 
-class Html(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    index = models.TextField()
-
-
-class Static(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    name = models.TextField()
-    static = models.TextField()
-
-    class Meta:
-        pass
-        #unique_together = ('project', 'name')
+class Remote(models.Model):
+    project = models.OneToOneField(Project, on_delete=models.CASCADE)
+    organisation = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    repository = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    branch = models.CharField(max_length=DEFAULT_MAX_LENGTH, default='main')
+    last_accessed = models.DateTimeField(default=datetime.fromtimestamp(0))
 
     def __str__(self):
-        return self.name
+        return str(self.organisation) + '/' + str(self.repository) + '@' + str(self.branch)
+
+    def collect(self, name='index.html'):
+        g = Github(GITHUB_API_TOKEN)
+        repository = g.get_user(self.organisation).get_repo(self.repository)
+        if not repository.get_commits(since=self.last_accessed).totalCount:
+            return self.static_files.filter(name=name).first()
+        
+        self.last_accessed = datetime.now()
+        self.save()
+        files = [git_tree_element.path for git_tree_element in repository.get_git_tree(f'{self.branch}?recursive=1').tree]
+
+        for file in files:
+            self.static_files.create(
+                remote=self, 
+                name=file, 
+                content=repository.get_contents(file).decoded_content.decode()
+            )
+        
+        return self.static_files.filter(name=name).first()
+
+
+class StaticFile(models.Model):
+    remote = models.ForeignKey(Remote, on_delete=models.CASCADE, related_name='static_files')
+    name = models.CharField(max_length=255)
+    content = models.TextField()
+
+    def __str__(self):
+        return self.remote.project.name + '/' + self.name
+
+    @property
+    def content_type(self):
+        if self.name.split('.')[-1] == 'js':
+            return 'application/javascript'
+        
+        if self.name.split('.')[-1] == 'css':
+            return 'text/css'
+
+        if self.name.split('.')[-1] in ('html', 'htm'):
+            return 'text/html'
+
+    class Meta:
+        unique_together = ('remote', 'name')
+
 
 def HasParent(cls, *, related_name,on_delete=models.CASCADE, **options):
     Meta = type(related_name + 'Meta', (), {

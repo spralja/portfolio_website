@@ -18,13 +18,11 @@
                 {{ user.about_me }}
             </p>
             {% for project in user.projects.all %}
-                <a href="{{ project.url }}">
-                    <h2>
-                        {{ project }}
-                    </h2>
-                </a>
+                <h2>
+                    {{ project }}
+                </h2>
                 <p>
-                    {{ project.get_description | safe}}
+                    {{ project.description | safe}}
                 </p>
             {% endfor %}
             {% include 'main/footer.html' %}

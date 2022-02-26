@@ -29,17 +29,10 @@ def contact(request):
     return HttpResponse(template.render(context, request))
 
 
-def project(request, name):
-    static_website = Project.objects.filter(name=name).first().remote.static_website
-    index = static_website.collect()
+def project(request, name, subfile=''):
+    remote = Project.objects.filter(name=name).first().remote
+    index = remote.collect(*((subfile, ) if subfile else ())) 
     return HttpResponse(index.content, content_type=index.content_type)
-
-
-def subfile(request, name, subfile):
-    static_website = Project.objects.filter(name=name).first().remote.static_website
-    index = static_website.collect(subfile)
-    return HttpResponse(index.content, content_type=index.content_type)
-
 
 
 class ProjectAPIView(APIView):

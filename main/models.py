@@ -2,9 +2,13 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from portfolio_website import models
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
+from datetime import datetime
 
 from markdown import markdown
 from github import Github
+from github.Commit import Commit
+
+from portfolio_website.settings import TIME_ZONE
 
 DEFAULT_MAX_LENGTH = 255
 
@@ -50,46 +54,43 @@ class Project(models.Model):
         return markdown(self._description)
 
 
-
 class Remote(models.Model):
     project = models.OneToOneField(Project, on_delete=models.CASCADE)
     organisation = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     repository = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    object = models.CharField(max_length=DEFAULT_MAX_LENGTH, default='main')
+    branch = models.CharField(max_length=DEFAULT_MAX_LENGTH, default='main')
+    last_accessed = models.DateTimeField(default=datetime.fromtimestamp(0))
 
     def __str__(self):
-        return str(self.organisation) + '/' + str(self.repository) + '@' + str(self.object)
+        return str(self.organisation) + '/' + str(self.repository) + '@' + str(self.branch)
 
-
-class StaticWebsite(models.Model):
-    remote = models.OneToOneField(Remote, on_delete=models.CASCADE, related_name='static_website')
-
-    def __str__(self):
-        return str(self.remote.project.name) + ' website'
-
-    def collect(self, file='index.html'):
-        print('test\n\n\n\test\n\n')
-        index = self.static_files.filter(name=file).first()
-        print(index)
+    def collect(self, name='index.html'):
+        g = Github('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')
+        repository = g.get_user(self.organisation).get_repo(self.repository)
+        if not repository.get_commits(since=self.last_accessed).totalCount:
+            return self.static_files.filter(name=name).first()
         
-        if index:
-            return index
+        self.last_accessed = datetime.now()
+        self.save()
+        files = [git_tree_element.path for git_tree_element in repository.get_git_tree(f'{self.branch}?recursive=1').tree]
 
-        g = Github()
-        repository = g.get_user(self.remote.organisation).get_repo(self.remote.repository)
-        index = repository.get_contents(file).decoded_content.decode()
-        index = self.static_files.create(static_website=self, name=file, content=index)
+        for file in files:
+            self.static_files.create(
+                remote=self, 
+                name=file, 
+                content=repository.get_contents(file).decoded_content.decode()
+            )
         
-        return index
+        return self.static_files.filter(name=name).first()
 
 
 class StaticFile(models.Model):
-    static_website = models.ForeignKey(StaticWebsite, on_delete=models.CASCADE, related_name='static_files')
+    remote = models.ForeignKey(Remote, on_delete=models.CASCADE, related_name='static_files')
     name = models.CharField(max_length=255)
     content = models.TextField()
 
     def __str__(self):
-        return self.static_website.remote.project.name + '/' + self.name
+        return self.remote.project.name + '/' + self.name
 
     @property
     def content_type(self):
@@ -103,7 +104,7 @@ class StaticFile(models.Model):
             return 'text/html'
 
     class Meta:
-        unique_together = ('static_website', 'name')
+        unique_together = ('remote', 'name')
 
 
 def HasParent(cls, *, related_name,on_delete=models.CASCADE, **options):

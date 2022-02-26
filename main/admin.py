@@ -1,9 +1,15 @@
 from django.contrib import admin
 
-from .models import User, Picture, Project, Remote, StaticWebsite
+from .models import User, Picture, Project, Remote, StaticFile
 
 admin.site.register(User)
 admin.site.register(Picture)
 admin.site.register(Project)
-admin.site.register(Remote)
-admin.site.register(StaticWebsite)
+
+
+class RemoteAdmin(admin.ModelAdmin):
+    readonly_fields = ('last_accessed',)
+    
+admin.site.register(Remote, RemoteAdmin)
+
+admin.site.register(StaticFile)

@@ -2,6 +2,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from portfolio_website import models
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
+from django.template import Context, Template
 from datetime import datetime
 
 from markdown import markdown
@@ -51,7 +52,9 @@ class Project(models.Model):
 
     @property
     def description(self):
-        return markdown(self._description)
+        template = Template(markdown(self._description))
+        context = Context({'self': self})
+        return template.render(context)
 
 
 class Remote(models.Model):

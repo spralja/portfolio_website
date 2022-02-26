@@ -39,10 +39,7 @@ jobs:
           DB_PASS: $DB_PASS
           DB_HOST: $DB_HOST
           DB_DEBUG: 'False'
-        run: |
-          python manage.py test
-          python manage.py makemigrations
-          python manage.py migrate
+        run: python manage.py test
       
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v2

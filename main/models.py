@@ -42,11 +42,15 @@ class Project(models.Model):
 
 
 class StaticWebsiteManager(models.Manager):
-    pass
+    def create(self, *args, **kwargs):
+
+        return super.create(*args, **kwargs)
 
 
 class StaticWebsite(models.Model):
     remote = models.URLField()
+    tracked = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+
 
     objects = StaticWebsiteManager
 

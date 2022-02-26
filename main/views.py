@@ -1,10 +1,11 @@
 from django.http import HttpResponse, Http404
 from django.template import loader
+from django.shortcuts import redirect
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .models import User
+from .models import User, Project
 from .serializers import ExperienceSerializer, EducationSerializer, CVSerializer
 
 
@@ -28,6 +29,10 @@ def contact(request):
 
     return HttpResponse(template.render(context, request))
 
+
+def project(request, name):
+    static_website = Project.objects.filter(name=name).first().static_website
+    return redirect(static_website.get_url())
 
 class ProjectAPIView(APIView):
     def get(serf, request):

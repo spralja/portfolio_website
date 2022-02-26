@@ -40,25 +40,15 @@ class Project(models.Model):
     user = models.ForeignKey(User, related_name='projects', on_delete=models.CASCADE)
     title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     name = models.CharField(max_length=DEFAULT_MAX_LENGTH, primary_key=True, validators=[NotTakenNameValidator])
-    description = models.MarkdownField(blank=True)
+    _description = models.MarkdownField(blank=True)
 
     def __str__(self):
         return self.title
 
-    def get_description(self):
-        return markdown(self.description)
+    @property
+    def description(self):
+        return markdown(self._description)
 
-    def get_index(self):
-        g = Github()
-        repo = g.get_user(self.github_user_name).get_repo(self.github_repo)
-        file = repo.get_contents('index.html')
-        return file.decoded_content.decode()
-
-    def get_static(self, static):
-        g = Github()
-        repo = g.get_user(self.github_user_name).get_repo(self.github_repo)
-        file = repo.get_contents(static)
-        return file.decoded_content.decode()
 
 
 class Remote(models.Model):

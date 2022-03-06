@@ -13,7 +13,7 @@ from portfolio_website.settings import TIME_ZONE, GITHUB_API_TOKEN
 
 DEFAULT_MAX_LENGTH = 255
 
-TAKEN_NAMES = frozenset('contact', 'admin')
+TAKEN_NAMES = frozenset({'contact', 'admin'})
 
 
 def NotTakenNameValidator(value):

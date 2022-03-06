@@ -5,7 +5,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from .models import User, Project
-from .serializers import ExperienceSerializer, EducationSerializer, CVSerializer
 
 
 def index(request):
@@ -33,34 +32,3 @@ def project(request, name, subfile=''):
     remote = Project.objects.filter(name=name).first().remote
     index = remote.collect(*((subfile, ) if subfile else ())) 
     return HttpResponse(index.content, content_type=index.content_type)
-
-
-class ProjectAPIView(APIView):
-    def get(serf, request):
-        projects = Project.objects.all()
-        serializer = ProjectSerializer(projects, many=True)
-        return Response(serializer.data)
-
-
-class ExperienceAPIView(APIView):
-    def get(self, request, name='main'):
-        experiences = CV.objects.filter(name=name).first().experiences.all()
-        serializer = ExperienceSerializer(experiences, many=True)
-        return Response(serializer.data)
-
-
-class EducationAPIView(APIView):
-    def get(self, request, name='main'):
-        educations = CV.objects.filter(name=name).first().educations.all()
-        print(educations)
-        serializer = EducationSerializer(educations, many=True)
-        return Response(serializer.data)
-
-
-class CVAPIView(APIView):
-    def get(self, request, name='main'):
-        cv = CV.objects.filter(name=name).first()
-        serializer = CVSerializer(cv)
-        return Response(serializer.data)
-
-

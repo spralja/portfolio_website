@@ -27,9 +27,6 @@ class User(models.Model):
     about_me = models.TextField(blank=True)
     picture = models.OneToOneField(Picture, on_delete=models.CASCADE, null=True)
     email = models.EmailField(null=True)
-    github = models.URLField(null=True)
-    gitlab = models.URLField(null=True)
-    linkedin = models.URLField(null=True)
 
     def __str__(self):
         return self.name

@@ -5,6 +5,7 @@ from . import views
 app_name = 'main'
 urlpatterns = [
     path('', views.index, name='index'),
+    path('contact/', views.contact, name='contact'),
     path('<str:name>/', views.project, name='project'),
     path('<str:name>/<str:subfile>/', views.project, name='project'),
 ]

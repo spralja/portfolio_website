@@ -13,15 +13,6 @@ from portfolio_website.settings import TIME_ZONE, GITHUB_API_TOKEN
 
 DEFAULT_MAX_LENGTH = 255
 
-TAKEN_NAMES = frozenset({'contact', 'admin'})
-
-
-def NotTakenNameValidator(value):
-    if value in TAKEN_NAMES:
-        raise ValidationError(
-            _('%(value) name taken'),
-            params={'value': value},
-        )
 
 class Picture(models.Model):
     url = models.URLField()
@@ -47,7 +38,7 @@ class User(models.Model):
 class Project(models.Model):
     user = models.ForeignKey(User, related_name='projects', on_delete=models.CASCADE)
     title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    name = models.CharField(max_length=DEFAULT_MAX_LENGTH, primary_key=True, validators=[NotTakenNameValidator])
+    name = models.CharField(max_length=DEFAULT_MAX_LENGTH, primary_key=True)
     _description = models.MarkdownField(blank=True)
 
     def __str__(self):

@@ -28,9 +28,9 @@
                     Social
                 </h2>
                 <ol>
-                    <li><a href="{{ user.github }}">Github</a></li>
-                    <li><a href="{{ user.gitlab }}">Gitlab</a></li>
-                    <li><a href="{{ user.linkedin }}">LinkedIn</a></li>
+                {% for social in user.socials.all %}
+                    <li><a href="{{ social.url }}">{{ social.title }}</a></li>
+                {% endfor %}
                 </ol>
                 <hr>
                 {% include 'main/footer.html' %}

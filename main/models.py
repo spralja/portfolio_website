@@ -27,6 +27,7 @@ class User(models.Model):
     about_me = models.TextField(blank=True)
     picture = models.OneToOneField(Picture, on_delete=models.CASCADE, null=True)
     email = models.EmailField(null=True)
+    url = models.URLField()    
 
     def __str__(self):
         return self.name

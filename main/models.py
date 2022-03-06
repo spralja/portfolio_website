@@ -35,6 +35,14 @@ class User(models.Model):
         return self.name
 
 
+class Social(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    url = models.URLField()
+    class Meta:
+        unique_together = ('user', 'title')
+
+
 class Project(models.Model):
     user = models.ForeignKey(User, related_name='projects', on_delete=models.CASCADE)
     title = models.CharField(max_length=DEFAULT_MAX_LENGTH)

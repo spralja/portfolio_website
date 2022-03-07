@@ -67,9 +67,9 @@ DB_DEBUG = (os.environ.get('DB_DEBUG') == 'True')
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3' if os.environ.get('DB_DEBUG') == 'True' else 'django.db.backends.postgresql',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3') if os.environ.get('DB_DEBUG') == 'True' else os.environ['DB_NAME'],
-        'USER': os.environ['DB_USER'],
+        'ENGINE': os.environ['DB_ENGINE'],
+        'NAME': os.environ['DB_NAME'],
+        'USER': '@'.join((os.environ['DB_USER'], os.environ['DB_HOST'])),
         'PASSWORD': os.environ['DB_PASS'],
         'HOST': os.environ['DB_HOST'],
     }

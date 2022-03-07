@@ -2,6 +2,10 @@ from pathlib import Path
 
 import os
 
+# Environment Variables
+# 'SECRET_KEY', 'GH_API_TOKEN', 'DEBUG', 'HOST', 'DB_ENGINE', 
+# 'DB_NAME', 'DB_USER', 'DB_PASS', 'DB_HOST',
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -9,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ['SECRET_KEY']
 
-GITHUB_API_TOKEN = os.environ.get('GITHUB_API_TOKEN')
+GH_API_TOKEN = os.environ['GH_API_TOKEN']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = (os.environ.get('DEBUG') == 'True')
@@ -63,9 +67,6 @@ WSGI_APPLICATION = 'portfolio_website.wsgi.application'
 
 
 # Database
-
-# Use sqlite instead of postgresql
-DB_DEBUG = (os.environ.get('DB_DEBUG') == 'True')
 
 DATABASES = {
     'default': {

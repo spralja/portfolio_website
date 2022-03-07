@@ -35,7 +35,6 @@ jobs:
         env:
           SECRET_KEY: $SECRET_KEY
           GH_API_TOKEN: $GH_API_TOKEN
-          DEBUG: 'False'
           HOST: $HOST
           DB_ENGINE: $DB_ENGINE
           DB_NAME: $DB_NAME

@@ -24,6 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ['SECRET_KEY']
 GITHUB_API_TOKEN = os.environ.get('GITHUB_API_TOKEN')
+DOMAIN = os.environ['DOMAIN']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main',
+    'github_integration',
     'rest_framework',
 ]
 

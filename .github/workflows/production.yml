@@ -39,8 +39,6 @@ jobs:
           DB_PASS: $DB_PASS
           DB_HOST: $DB_HOST
           DB_DEBUG: 'False'
-          DOMAIN: $DOMAIN
-          GITHUB_API_TOKEN: $_GITHUB_API_TOKEN
         run: python manage.py test
       
       - name: Upload artifact for deployment jobs

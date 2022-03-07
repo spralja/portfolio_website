@@ -34,11 +34,14 @@ jobs:
       - name: Run tests
         env:
           SECRET_KEY: $SECRET_KEY
+          GH_API_TOKEN: $GH_API_TOKEN
+          DEBUG: 'False'
+          HOST: $HOST
+          DB_ENGINE: $DB_ENGINE
           DB_NAME: $DB_NAME
           DB_USER: $DB_USER
           DB_PASS: $DB_PASS
           DB_HOST: $DB_HOST
-          DB_DEBUG: 'False'
         run: python manage.py test
       
       - name: Upload artifact for deployment jobs

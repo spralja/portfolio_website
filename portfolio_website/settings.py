@@ -14,6 +14,8 @@ GITHUB_API_TOKEN = os.environ.get('GITHUB_API_TOKEN')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = (os.environ.get('DEBUG') == 'True')
 
+HOST = os.environ['HOST']
+
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [

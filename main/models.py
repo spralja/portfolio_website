@@ -9,7 +9,7 @@ from markdown import markdown
 from github import Github
 from github.Commit import Commit
 
-from portfolio_website.settings import TIME_ZONE, GITHUB_API_TOKEN
+from portfolio_website.settings import TIME_ZONE, GH_API_TOKEN
 
 DEFAULT_MAX_LENGTH = 255
 
@@ -72,7 +72,7 @@ class Remote(models.Model):
         return str(self.organisation) + '/' + str(self.repository) + '@' + str(self.branch)
 
     def collect(self, name='index.html'):
-        g = Github(*((GITHUB_API_TOKEN,) if GITHUB_API_TOKEN else ()))
+        g = Github(*((GH_API_TOKEN,) if GH_API_TOKEN else ()))
         repository = g.get_user(self.organisation).get_repo(self.repository)
         if not repository.get_commits(since=self.last_accessed).totalCount:
             return self.static_files.filter(name=name).first()

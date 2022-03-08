@@ -3,8 +3,11 @@ from pathlib import Path
 import os
 
 # Environment Variables
-# 'SECRET_KEY', 'GH_API_TOKEN', 'DEBUG', 'HOST', 'DB_ENGINE', 
-# 'DB_NAME', 'DB_USER', 'DB_PASS', 'DB_HOST',
+# Required
+# 'SECRET_KEY', 'GH_API_TOKEN', 'HOST', 
+# 'DB_ENGINE', 'DB_NAME', 'DB_USER', 'DB_PASS', 'DB_HOST',
+# Not Required
+# 'DEBUG', 'DB_DEBUG',
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

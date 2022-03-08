@@ -50,6 +50,7 @@ class Project(models.Model):
     title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     name = models.CharField(max_length=DEFAULT_MAX_LENGTH, primary_key=True)
     _description = models.MarkdownField(blank=True)
+    date_started = models.DateField()
 
     def __str__(self):
         return self.title

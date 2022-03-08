@@ -1,12 +1,9 @@
 from django.http import HttpResponse
 from .models import Image
 
-def index(request, project_name):
-
-    return HttpResponse(project_name)
 
 def image(request, image_name):
-    image = Image.filter(name=image_name).first()
+    image = Image.objects.filter(name=image_name).first()
     valid_image = str(image.image)
     try:
         with open(valid_image, "rb") as f:

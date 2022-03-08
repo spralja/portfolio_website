@@ -71,7 +71,7 @@ WSGI_APPLICATION = 'portfolio_website.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.environ['DB_NAME'],
         'USER': '@'.join((os.environ['DB_USER'], os.environ['DB_HOST'])),
         'PASSWORD': os.environ['DB_PASS'],

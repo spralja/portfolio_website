@@ -10,8 +10,10 @@ from .models import User, Project
 def index(request):
     template = loader.get_template('main/index.html')
     user = User.objects.first()
+    projects = user.projects.order_by('-date_started')
     context = {
         'user': user,
+        'projects': projects
     }
 
     return HttpResponse(template.render(context, request))

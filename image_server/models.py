@@ -13,5 +13,24 @@ class Image(models.Model):
     def path(self):
         return Path(self.image.name)
 
+    def get_raw(self):
+        try:
+            with open(self.path, 'rb') as file:
+                return file.read()
+        except IOError:
+            raise IOError('image missing')
+
+    def get_content_type(self):
+        content_type = 'image/'
+        file_extension = str(self.path).split('.')[-1]
+        if file_extension in {'jpg', 'jpeg'}:
+            content_type += 'jpeg'
+        elif file_extension == 'png':
+            content_type += 'png'
+        else:
+            raise ValueError('Unknown file extension')
+
+        return content_type
+
     def __str__(self):
         return self.uid

@@ -1,5 +1,5 @@
 from django.apps import AppConfig
-from django.db.models.signals import pre_delete
+from django.db.models.signals import post_save
 
 
 class ImageServerConfig(AppConfig):
@@ -8,4 +8,4 @@ class ImageServerConfig(AppConfig):
 
     def ready(self):
         from . import signals
-        pre_delete.connect(signals.image_pre_delete, dispatch_uid='image_server.signals.image_pre_delete')
+        post_save.connect(signals.create_image_binary, dispatch_uid='image_server.signals.create_image_binary')

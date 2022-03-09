@@ -6,4 +6,3 @@ app_name = 'image_server'
 urlpatterns = [
     path('<str:uid>/', views.get_image, name='image'),
 ]
-

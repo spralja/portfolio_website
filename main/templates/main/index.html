@@ -15,7 +15,7 @@
                 <img class="profile-picture" src="{{user.picture.url }}" alt="{{ user.picture.alt }}"/>
             </p>
             <p>
-                {{ user.get_about_me }}
+                {{ user._about_me }}
             </p>
             {% for project in projects %}
                 <h2>

@@ -34,3 +34,8 @@ class Image(models.Model):
 
     def __str__(self):
         return self.uid
+
+class ImageBinary(models.Model):
+    image = models.OneToOneField(Image, on_delete=models.CASCADE, related_name='image_binary')
+    binary = models.TextField()
+    content_type = models.CharField(max_length=DEFAULT_MAX_LENGTH)

@@ -30,7 +30,7 @@ class User(models.Model):
     url = models.URLField()    
 
     @property
-    def _about_me(self):
+    def get_about_me(self):
         return markdown(self.about_me)
 
     def __str__(self):

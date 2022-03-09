@@ -1,17 +1,9 @@
 from .models import Image, ImageBinary
 
-from django.db.models.signals import post_save, pre_delete
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from pathlib import Path
-
-
-@receiver(pre_delete, sender=Image, dispatch_uid='image_server.image_pre_delete')
-def image_pre_delete(sender, instance, **kwargs):
-    if type(instance) is not Image:
-        return
-
-    #instance.path.unlink(missing_ok=True)
 
 
 @receiver(post_save, sender=Image, dispatch_uid='image_server.signals.create_image_binary')

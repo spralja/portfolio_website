@@ -15,7 +15,7 @@
                 <img class="profile-picture" src="{{user.picture.url }}" alt="{{ user.picture.alt }}"/>
             </p>
             <p>
-                {{ user.about_me }}
+                {{ user.get_about_me | safe}}
             </p>
             {% for project in projects %}
                 <h2>

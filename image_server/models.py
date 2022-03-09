@@ -7,7 +7,7 @@ from pathlib import Path
 
 class Image(models.Model):
     uid = models.CharField(max_length=DEFAULT_MAX_LENGTH, primary_key=True)
-    image = models.ImageField(upload_to=Path('image_server') / 'storage', max_length=DEFAULT_MAX_LENGTH)
+    image = models.ImageField(upload_to=Path('image_server') / 'temp', max_length=DEFAULT_MAX_LENGTH)
 
     @property
     def path(self):

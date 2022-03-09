@@ -29,10 +29,6 @@ class User(models.Model):
     email = models.EmailField(null=True)
     url = models.URLField()    
 
-    @property
-    def _about_me(self):
-        return markdown(self.about_me)
-
     def __str__(self):
         return self.name
 

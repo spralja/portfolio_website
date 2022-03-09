@@ -37,5 +37,5 @@ class Image(models.Model):
 
 class ImageBinary(models.Model):
     image = models.OneToOneField(Image, on_delete=models.CASCADE, related_name='image_binary')
-    binary = models.TextField()
+    binary = models.BinaryField()
     content_type = models.CharField(max_length=DEFAULT_MAX_LENGTH)

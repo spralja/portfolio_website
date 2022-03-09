@@ -14,11 +14,8 @@ class Image(models.Model):
         return Path(self.image.name)
 
     def get_raw(self):
-        try:
-            with open(self.path, 'rb') as file:
-                return file.read()
-        except IOError:
-            raise IOError('image missing')
+        with open(self.path, 'rb') as file:
+            return file.read()
 
     def get_content_type(self):
         content_type = 'image/'
@@ -28,7 +25,7 @@ class Image(models.Model):
         elif file_extension == 'png':
             content_type += 'png'
         else:
-            raise ValueError('Unknown file extension')
+            content_type += 'unknown'
 
         return content_type
 

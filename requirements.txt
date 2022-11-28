@@ -23,4 +23,4 @@ sqlparse==0.4.2
 urllib3==1.26.8
 whitenoise==6.0.0
 wrapt==1.13.3
-zipp==3.7.0
+zipp==3.11.0
